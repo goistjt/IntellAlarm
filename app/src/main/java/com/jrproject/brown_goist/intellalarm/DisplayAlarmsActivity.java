@@ -17,9 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.GregorianCalendar;
 
@@ -47,18 +49,20 @@ public class DisplayAlarmsActivity extends ListActivity {
 
         setListAdapter(cursorAdaptor);
 
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        getListView().setClickable(true);
+
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //create dialog for editing
-                showAlarmDialog("Edit");
+                makeToast(position);
+                showAlarmDialog("Edit", id);
+                return true;
             }
         });
-
-        registerForContextMenu(getListView());
     }
 
-    private boolean showAlarmDialog(final String type) {
+    private boolean showAlarmDialog(final String type, final long... id) {
         DialogFragment df = new DialogFragment() {
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -82,8 +86,15 @@ public class DisplayAlarmsActivity extends ListActivity {
                         TimePicker tp = (TimePicker) v.findViewById(R.id.dialog_alarm_time_picker);
                         GregorianCalendar time = new GregorianCalendar(0, 0, 0, tp.getCurrentHour(),
                                 tp.getCurrentMinute());
-                        Alarm a = new Alarm(name, time);
-                        addAlarm(a);
+                        if (type.equals("Add")) {
+                            Alarm a = new Alarm(name, time);
+                            addAlarm(a);
+                        } else {
+                            Alarm a = getAlarm(id[0]);
+                            a.setName(name);
+                            a.setAlarmTime(time);
+                            editAlarm(a);
+                        }
                     }
                 });
                 return builder.create();
@@ -91,6 +102,18 @@ public class DisplayAlarmsActivity extends ListActivity {
         };
         df.show(getFragmentManager(), "");
         return true;
+    }
+
+    /**
+     * ListActivity sets up the onItemClick listener for the list view
+     * automatically via this function
+     */
+    @Override
+    protected void onListItemClick(ListView listView, View selectedView,
+                                   int position, long id) {
+        super.onListItemClick(listView, selectedView, position, id);
+        selectedId = id;
+        showAlarmDialog("Edit", id);
     }
 
     /**
@@ -147,7 +170,7 @@ public class DisplayAlarmsActivity extends ListActivity {
                 return true;
             case R.id.menu_item_list_view_edit:
                 selectedId = info.id;
-                showAlarmDialog("Edit");
+                showAlarmDialog("Edit", selectedId);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -208,5 +231,9 @@ public class DisplayAlarmsActivity extends ListActivity {
     private void removeAlarm(long id) {
         alarmDataAdapter.removeAlarm(id);
         cursorAdaptor.changeCursor(alarmDataAdapter.getAlarmsCursor());
+    }
+
+    private void makeToast(int pos) {
+        Toast.makeText(this, "Selected item " + pos, Toast.LENGTH_SHORT).show();
     }
 }

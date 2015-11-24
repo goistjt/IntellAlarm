@@ -11,6 +11,8 @@ public class Alarm {
     private GregorianCalendar alarmTime;
     private long id;
 
+    public Alarm() { }
+
     public Alarm(String n, GregorianCalendar t) {
         name = n;
         alarmTime = t;
@@ -46,6 +48,10 @@ public class Alarm {
 
     public void setAlarmTime(int hour, int minute) {
         alarmTime = new GregorianCalendar(0, 0, 0, hour, minute);
+    }
+
+    public void setAlarmTime(GregorianCalendar time) {
+        alarmTime = time;
     }
 
     public String toString() {
