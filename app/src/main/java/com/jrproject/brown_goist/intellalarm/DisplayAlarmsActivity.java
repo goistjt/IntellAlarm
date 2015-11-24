@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
+import android.widget.CursorAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,7 +30,7 @@ import java.util.GregorianCalendar;
 
 public class DisplayAlarmsActivity extends ListActivity {
     private AlarmDataAdapter alarmDataAdapter;
-    private SimpleCursorAdapter cursorAdaptor;
+    private CursorAdapter cursorAdaptor;
 
     private static final long NO_SELECTED_ID = -1;
     private long selectedId = NO_SELECTED_ID;
@@ -42,13 +43,14 @@ public class DisplayAlarmsActivity extends ListActivity {
         alarmDataAdapter.open();
 
         Cursor cursor = alarmDataAdapter.getAlarmsCursor();
-        String[] fromColumns = new String[]{AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
-                AlarmDataAdapter.KEY_MINUTE, AlarmDataAdapter.KEY_STATUS};
-        int[] toTextViews = new int[]{R.id.alarm_list_name_text_view,
-                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view,
-                R.id.alarm_on_switch};
-        cursorAdaptor = new SimpleCursorAdapter(this, R.layout.alarm_list_item, cursor,
-                fromColumns, toTextViews, 0);
+//        String[] fromColumns = new String[]{AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
+//                AlarmDataAdapter.KEY_MINUTE, AlarmDataAdapter.KEY_STATUS};
+//        int[] toTextViews = new int[]{R.id.alarm_list_name_text_view,
+//                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view,
+//                R.id.alarm_on_switch};
+//        cursorAdaptor = new SimpleCursorAdapter(this, R.layout.alarm_list_item, cursor,
+//                fromColumns, toTextViews, 0);
+        cursorAdaptor = new AlarmCursorAdapter(this, cursor, 0);
 
 
 
@@ -187,6 +189,7 @@ public class DisplayAlarmsActivity extends ListActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        alarmDataAdapter.close();
     }
 
     // ======================================================================
@@ -241,4 +244,5 @@ public class DisplayAlarmsActivity extends ListActivity {
     private void makeToast(int pos) {
         Toast.makeText(this, "Selected item " + pos, Toast.LENGTH_SHORT).show();
     }
+
 }
