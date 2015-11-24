@@ -67,6 +67,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:checked="true"
-        android:clickable="false"
-        android:enabled="false"/>
+        android:clickable="true"
+        android:enabled="true"/>
 </LinearLayout>
