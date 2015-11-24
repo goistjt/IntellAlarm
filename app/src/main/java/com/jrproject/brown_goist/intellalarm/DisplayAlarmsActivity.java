@@ -23,15 +23,14 @@ public class DisplayAlarmsActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.alarm_list_activity);
-
         alarmDataAdapter = new AlarmDataAdapter(this);
         alarmDataAdapter.open();
 
         Cursor cursor = alarmDataAdapter.getAlarmsCursor();
         String[] fromColumns = new String[] {AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
                 AlarmDataAdapter.KEY_MINUTE};
-        int[] toTextViews = new int[] {R.id.textViewName, R.id.textViewHour, R.id.textViewMinute};
+        int[] toTextViews = new int[] {R.id.alarm_list_name_text_view,
+                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view};
         cursorAdaptor = new SimpleCursorAdapter(this, R.layout.alarm_list_item, cursor,
                 fromColumns, toTextViews, 0);
 

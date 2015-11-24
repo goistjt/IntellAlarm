@@ -15,20 +15,40 @@
         android:layout_weight="1">
 
 
-        <TextView
-            android:id="@+id/alarm_list_time_text_view"
+        <LinearLayout
+            android:id="@+id/alarm_list_time_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/alarm_list_time_default"/>
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/alarm_list_time_hour_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_list_time_default_hour"/>
+
+            <TextView
+                android:id="@+id/alarm_list_time_colon_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_list_time_colon"/>
+
+            <TextView
+                android:id="@+id/alarm_list_time_minute_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/alarm_list_time_default_minute"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/alarm_list_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/alarm_list_time_text_view"
+            android:layout_below="@+id/alarm_list_time_layout"
             android:text="@string/alarm_list_name_default"/>
 
         <TextView
