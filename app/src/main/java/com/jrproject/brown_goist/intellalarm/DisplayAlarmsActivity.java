@@ -1,16 +1,27 @@
 package com.jrproject.brown_goist.intellalarm;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+import java.util.GregorianCalendar;
 
 public class DisplayAlarmsActivity extends ListActivity {
     private AlarmDataAdapter alarmDataAdapter;
@@ -40,10 +51,43 @@ public class DisplayAlarmsActivity extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //create dialog for editing
+                showAlarmDialog("Edit");
             }
         });
 
         registerForContextMenu(getListView());
+    }
+
+    private boolean showAlarmDialog(final String type) {
+        DialogFragment df = new DialogFragment() {
+            @Override
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(type + " Alarm");
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                final View v = inflater.inflate(R.layout.dialog_add_alarm, null);
+                builder.setView(v);
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dismiss();
+                    }
+                });
+                builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = ((EditText) v.findViewById(R.id.dialog_alarm_name)).getText().toString();
+                        TimePicker tp = (TimePicker) v.findViewById(R.id.dialog_alarm_time_picker);
+                        GregorianCalendar time = new GregorianCalendar(0, 0, 0, tp.getHour(), tp.getMinute());
+                        Alarm a = new Alarm(name, time);
+                        addAlarm(a);
+                    }
+                });
+                return builder.create();
+            }
+        };
+        df.show(getFragmentManager(), "");
+        return true;
     }
 
     /**
@@ -66,7 +110,7 @@ public class DisplayAlarmsActivity extends ListActivity {
         switch (item.getItemId()) {
             case R.id.menu_add_alarm:
                 selectedId = NO_SELECTED_ID;
-                showDialog(DIALOG_ID);
+                showAlarmDialog("Add");
                 return true;
             default:
                 return false;
@@ -100,7 +144,7 @@ public class DisplayAlarmsActivity extends ListActivity {
                 return true;
             case R.id.menu_item_list_view_edit:
                 selectedId = info.id;
-                showDialog(DIALOG_ID);
+                showAlarmDialog("Edit");
                 return true;
         }
         return super.onContextItemSelected(item);

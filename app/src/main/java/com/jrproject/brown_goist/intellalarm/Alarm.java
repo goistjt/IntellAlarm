@@ -11,6 +11,11 @@ public class Alarm {
     private GregorianCalendar alarmTime;
     private long id;
 
+    public Alarm(String n, GregorianCalendar t) {
+        name = n;
+        alarmTime = t;
+    }
+
     public long getId() {
         return id;
     }
