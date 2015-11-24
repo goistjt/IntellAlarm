@@ -22,6 +22,7 @@ public class AlarmDataAdapter {
     public static final String KEY_NAME = "name";
     public static final String KEY_HOUR = "hour";
     public static final String KEY_MINUTE = "minute";
+    public static final String KEY_STATUS = "status";
 
     private static String DROP_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME;
     private static String CREATE_STATEMENT;
@@ -31,7 +32,8 @@ public class AlarmDataAdapter {
         sb.append(KEY_ID + " integer primary key autoincrement, ");
         sb.append(KEY_NAME + " text, ");
         sb.append(KEY_HOUR + " integer, ");
-        sb.append(KEY_MINUTE + " integer");
+        sb.append(KEY_MINUTE + " integer, ");
+        sb.append(KEY_STATUS + " integer, ");
         sb.append(")");
         CREATE_STATEMENT = sb.toString();
     }
@@ -62,17 +64,18 @@ public class AlarmDataAdapter {
         row.put(KEY_NAME, alarm.getName());
         row.put(KEY_HOUR, alarm.getHour());
         row.put(KEY_MINUTE, alarm.getMinute());
+        row.put(KEY_STATUS, alarm.getStatus());
         return row;
     }
 
     public Cursor getAlarmsCursor() {
-        String[] projection = new String[] {KEY_ID, KEY_NAME, KEY_HOUR, KEY_MINUTE};
+        String[] projection = new String[] {KEY_ID, KEY_NAME, KEY_HOUR, KEY_MINUTE, KEY_STATUS};
         return database.query(TABLE_NAME, projection, null, null, null, null, KEY_HOUR + " ASC,"
                 + KEY_MINUTE + " ASC, " + KEY_NAME + " ASC");
     }
 
     public Alarm getAlarm(long id) {
-        String[] projection = new String[] {KEY_ID, KEY_NAME, KEY_HOUR, KEY_MINUTE};
+        String[] projection = new String[] {KEY_ID, KEY_NAME, KEY_HOUR, KEY_MINUTE, KEY_STATUS};
         String selection = KEY_ID + " = " + id;
         Cursor c =  database.query(TABLE_NAME, projection, selection, null, null, null, null);
         if (c != null && c.moveToFirst()) {
@@ -87,6 +90,7 @@ public class AlarmDataAdapter {
         a.setName(c.getString(c.getColumnIndexOrThrow(KEY_NAME)));
         a.setAlarmTime(c.getInt(c.getColumnIndexOrThrow(KEY_HOUR)),
                 c.getInt(c.getColumnIndexOrThrow(KEY_MINUTE)));
+        a.setStatus(c.getInt(c.getColumnIndexOrThrow(KEY_STATUS)));
         return a;
     }
 
@@ -123,7 +127,7 @@ public class AlarmDataAdapter {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.d("DAA", "Upgrading the database from versison " + oldVersion +
+            Log.d("DAA", "Upgrading the database from version " + oldVersion +
                     " to " + newVersion + ", which will destroy old table(s).");
             db.execSQL(DROP_STATEMENT);
             onCreate(db);

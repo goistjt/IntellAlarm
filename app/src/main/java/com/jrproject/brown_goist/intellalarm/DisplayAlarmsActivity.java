@@ -15,10 +15,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -41,11 +43,14 @@ public class DisplayAlarmsActivity extends ListActivity {
 
         Cursor cursor = alarmDataAdapter.getAlarmsCursor();
         String[] fromColumns = new String[]{AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
-                AlarmDataAdapter.KEY_MINUTE};
+                AlarmDataAdapter.KEY_MINUTE, AlarmDataAdapter.KEY_STATUS};
         int[] toTextViews = new int[]{R.id.alarm_list_name_text_view,
-                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view};
+                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view,
+                R.id.alarm_on_switch};
         cursorAdaptor = new SimpleCursorAdapter(this, R.layout.alarm_list_item, cursor,
                 fromColumns, toTextViews, 0);
+
+
 
         setListAdapter(cursorAdaptor);
 

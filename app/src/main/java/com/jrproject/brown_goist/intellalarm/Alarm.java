@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 public class Alarm {
     private String name;
     private GregorianCalendar alarmTime;
+    private int status;
     private long id;
 
     public Alarm() { }
@@ -52,6 +53,14 @@ public class Alarm {
 
     public void setAlarmTime(GregorianCalendar time) {
         alarmTime = time;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int i) {
+        status = i;
     }
 
     public String toString() {
