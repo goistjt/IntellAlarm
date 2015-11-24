@@ -45,5 +45,8 @@
         android:id="@+id/alarm_on_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"/>
+        android:layout_gravity="center_vertical"
+        android:checked="true"
+        android:clickable="false"
+        android:enabled="false"/>
 </LinearLayout>
