@@ -38,9 +38,9 @@ public class DisplayAlarmsActivity extends ListActivity {
         alarmDataAdapter.open();
 
         Cursor cursor = alarmDataAdapter.getAlarmsCursor();
-        String[] fromColumns = new String[] {AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
+        String[] fromColumns = new String[]{AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
                 AlarmDataAdapter.KEY_MINUTE};
-        int[] toTextViews = new int[] {R.id.alarm_list_name_text_view,
+        int[] toTextViews = new int[]{R.id.alarm_list_name_text_view,
                 R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view};
         cursorAdaptor = new SimpleCursorAdapter(this, R.layout.alarm_list_item, cursor,
                 fromColumns, toTextViews, 0);
@@ -67,7 +67,8 @@ public class DisplayAlarmsActivity extends ListActivity {
                 LayoutInflater inflater = getActivity().getLayoutInflater();
                 final View v = inflater.inflate(R.layout.dialog_add_alarm, null);
                 builder.setView(v);
-                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface
+                        .OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dismiss();
@@ -76,9 +77,11 @@ public class DisplayAlarmsActivity extends ListActivity {
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String name = ((EditText) v.findViewById(R.id.dialog_alarm_name)).getText().toString();
+                        String name = ((EditText) v.findViewById(R.id.dialog_alarm_name)).getText
+                                ().toString();
                         TimePicker tp = (TimePicker) v.findViewById(R.id.dialog_alarm_time_picker);
-                        GregorianCalendar time = new GregorianCalendar(0, 0, 0, tp.getHour(), tp.getMinute());
+                        GregorianCalendar time = new GregorianCalendar(0, 0, 0, tp.getCurrentHour(),
+                                tp.getCurrentMinute());
                         Alarm a = new Alarm(name, time);
                         addAlarm(a);
                     }
