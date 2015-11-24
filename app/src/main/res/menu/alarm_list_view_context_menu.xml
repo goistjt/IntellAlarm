@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_item_list_view_delete"
+        android:title="@string/menu_delete_alarm">
+
+    </item>
+    <item
+        android:id="@+id/menu_item_list_view_edit"
+        android:title="@string/menu_edit_alarm">
+
+    </item>
+
+</menu>

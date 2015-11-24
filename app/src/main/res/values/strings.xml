@@ -5,4 +5,7 @@
     <string name="alarm_list_time_default">00:00</string>
     <string name="alarm_list_name_default">Name</string>
     <string name="alarm_list_day_default">Monday</string>
+    <string name="menu_add_alarm">Add Alarm</string>
+    <string name="menu_delete_alarm">Delete Alarm</string>
+    <string name="menu_edit_alarm">Edit Alarm</string>
 </resources>
