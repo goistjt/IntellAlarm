@@ -53,7 +53,6 @@ public class DisplayAlarmsActivity extends ListActivity {
         cursorAdaptor = new AlarmCursorAdapter(this, cursor, 0);
 
 
-
         setListAdapter(cursorAdaptor);
 
         getListView().setClickable(true);

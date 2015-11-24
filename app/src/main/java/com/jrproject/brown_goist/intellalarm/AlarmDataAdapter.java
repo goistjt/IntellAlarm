@@ -33,7 +33,7 @@ public class AlarmDataAdapter {
         sb.append(KEY_NAME + " text, ");
         sb.append(KEY_HOUR + " integer, ");
         sb.append(KEY_MINUTE + " integer, ");
-        sb.append(KEY_STATUS + " integer, ");
+        sb.append(KEY_STATUS + " integer");
         sb.append(")");
         CREATE_STATEMENT = sb.toString();
     }
@@ -70,7 +70,7 @@ public class AlarmDataAdapter {
 
     public Cursor getAlarmsCursor() {
         String[] projection = new String[] {KEY_ID, KEY_NAME, KEY_HOUR, KEY_MINUTE, KEY_STATUS};
-        return database.query(TABLE_NAME, projection, null, null, null, null, KEY_HOUR + " ASC,"
+        return database.query(TABLE_NAME, null, null, null, null, null, KEY_HOUR + " ASC, "
                 + KEY_MINUTE + " ASC, " + KEY_NAME + " ASC");
     }
 

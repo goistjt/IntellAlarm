@@ -9,9 +9,6 @@ import android.widget.CursorAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
 
-/**
- * Created by goistjt on 11/24/2015.
- */
 public class AlarmCursorAdapter extends CursorAdapter {
     private LayoutInflater inflater;
 
