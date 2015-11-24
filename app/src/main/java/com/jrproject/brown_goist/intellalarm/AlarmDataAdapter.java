@@ -105,6 +105,11 @@ public class AlarmDataAdapter {
         return database.delete(TABLE_NAME, selection, null) > 0;
     }
 
+    public void remakeTable() {
+        database.execSQL(DROP_STATEMENT);
+        database.execSQL(CREATE_STATEMENT);
+    }
+
     public boolean removeAlarm(Alarm alarm) {
         return removeAlarm(alarm.getId());
     }

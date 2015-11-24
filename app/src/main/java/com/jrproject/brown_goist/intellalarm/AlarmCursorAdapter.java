@@ -19,7 +19,7 @@ public class AlarmCursorAdapter extends CursorAdapter {
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return inflater.inflate(R.layout.alarm_list_item, parent);
+        return inflater.inflate(R.layout.alarm_list_item, parent, false);
     }
 
     @Override
@@ -29,8 +29,10 @@ public class AlarmCursorAdapter extends CursorAdapter {
         TextView name = (TextView) view.findViewById(R.id.alarm_list_name_text_view);
         Switch toggle = (Switch) view.findViewById(R.id.alarm_on_switch);
 
-        hour.setText(cursor.getInt(cursor.getColumnIndexOrThrow(AlarmDataAdapter.KEY_HOUR)));
-        minute.setText(cursor.getInt(cursor.getColumnIndexOrThrow(AlarmDataAdapter.KEY_MINUTE)));
+        hour.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(AlarmDataAdapter
+                .KEY_HOUR))));
+        minute.setText(String.valueOf(cursor.getInt(cursor.getColumnIndexOrThrow(AlarmDataAdapter
+                .KEY_MINUTE))));
         name.setText(cursor.getString(cursor.getColumnIndexOrThrow(AlarmDataAdapter.KEY_NAME)));
         toggle.setChecked(cursor.getInt(cursor.getColumnIndexOrThrow(AlarmDataAdapter.KEY_STATUS)
         ) == 1);
