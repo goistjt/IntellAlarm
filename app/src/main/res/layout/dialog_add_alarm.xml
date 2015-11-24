@@ -1,20 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <EditText
+        android:id="@+id/dialog_alarm_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dialog_alarm_name"
         android:layout_gravity="center_horizontal"
-        android:text="Alarm Name"/>
+        android:text="@string/dialog_alarm_name_default"/>
+
+    <TimePicker
+        android:id="@+id/dialog_alarm_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_repeat"
+        android:id="@+id/dialog_repeat_check"
+        android:checked="false"/>
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:shrinkColumns="*">
+        android:shrinkColumns="*"
+        >
 
         <TableRow
             android:layout_width="match_parent"
@@ -24,118 +39,144 @@
             >
 
             <ToggleButton
+                android:id="@+id/toggle_sunday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textOn="SUN"
-                android:textOff="SUN"
-                android:textSize="10sp"
-                android:id="@+id/toggle_sunday"
-                android:singleLine="true"
-                android:capitalize="characters"
+                android:layout_column="0"
+                android:layout_gravity="center"
                 android:checked="false"
                 android:clickable="false"
                 android:elegantTextHeight="false"
                 android:enabled="true"
                 android:gravity="center"
-                android:layout_gravity="center"/>
+                android:singleLine="true"
+                android:textOff="SUN"
+                android:textOn="SUN"
+                android:textSize="10sp"/>
+
             <ToggleButton
+                android:id="@+id/toggle_monday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:singleLine="true"
                 android:text="New ToggleButton"
-                android:id="@+id/toggle_monday"
                 android:textOff="MON"
                 android:textOn="MON"
-                android:textSize="10sp"
-                android:singleLine="true"
-                android:capitalize="characters"
+                android:textSize="10sp"/>
+
+            <ToggleButton
+                android:id="@+id/toggle_tuesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_gravity="center"
                 android:checked="false"
                 android:clickable="false"
                 android:elegantTextHeight="false"
                 android:enabled="true"
                 android:gravity="center"
-                android:layout_gravity="center"/>
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="New ToggleButton"
-                android:id="@+id/toggle_tuesday"
                 android:textOff="TUE"
                 android:textOn="TUE"
                 android:textSize="10sp"
-                android:visibility="visible"
-                android:singleLine="true"
-                android:capitalize="characters"
+                android:visibility="visible"/>
+
+            <ToggleButton
+                android:id="@+id/toggle_wednesday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:layout_gravity="center"
                 android:checked="false"
                 android:clickable="false"
                 android:elegantTextHeight="false"
                 android:enabled="true"
                 android:gravity="center"
-                android:layout_gravity="center"/>
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="New ToggleButton"
-                android:id="@+id/toggle_wednesday"
                 android:textOff="WED"
                 android:textOn="WED"
-                android:textSize="10sp"
-                android:singleLine="true"
-                android:capitalize="characters"
-                android:checked="false"
-                android:clickable="false"
-                android:elegantTextHeight="false"
-                android:enabled="true"
-                android:gravity="center"
-                android:layout_gravity="center"/>
+                android:textSize="10sp"/>
+
             <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="New ToggleButton"
                 android:id="@+id/toggle_thursday"
-                android:textOn="THU"
-                android:textSize="10sp"
-                android:textOff="THU"
-                android:singleLine="true"
-                android:capitalize="characters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="4"
+                android:layout_gravity="center"
                 android:checked="false"
                 android:clickable="false"
                 android:elegantTextHeight="false"
                 android:enabled="true"
                 android:gravity="center"
-                android:layout_gravity="center"/>
+                android:singleLine="true"
+                android:text="New ToggleButton"
+                android:textOff="THU"
+                android:textOn="THU"
+                android:textSize="10sp"/>
+
             <ToggleButton
+                android:id="@+id/toggle_friday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_column="5"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:singleLine="true"
                 android:text="New ToggleButton"
-                android:id="@+id/toggle_friday"
                 android:textOff="FRI"
                 android:textOn="FRI"
-                android:textSize="10sp"
-                android:singleLine="true"
-                android:capitalize="characters"
-                android:checked="false"
-                android:clickable="false"
-                android:elegantTextHeight="false"
-                android:enabled="true"
-                android:gravity="center"
-                android:layout_gravity="center"/>
+                android:textSize="10sp"/>
+
             <ToggleButton
+                android:id="@+id/toggle_saturday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New ToggleButton"
-                android:id="@+id/toggle_saturday"
-                android:textOff="SAT"
-                android:textOn="SAT"
-                android:textSize="10sp"
-                android:singleLine="true"
-                android:capitalize="characters"
+                android:layout_column="6"
+                android:layout_gravity="center"
                 android:checked="false"
                 android:clickable="false"
                 android:elegantTextHeight="false"
                 android:enabled="true"
                 android:gravity="center"
-                android:layout_gravity="center"/>
+                android:singleLine="true"
+                android:text="New ToggleButton"
+                android:textOff="SAT"
+                android:textOn="SAT"
+                android:textSize="10sp"/>
+
         </TableRow>
     </TableLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_volume_up_white_48dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/dialog_ic_sound"/>
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_alarm_volume_slider"
+            android:layout_gravity="center"/>
+    </LinearLayout>
 
 </LinearLayout>
