@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dialog_alarm_name"
+        android:layout_gravity="center_horizontal"
+        android:text="Alarm Name"/>
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            >
+
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOn="SUN"
+                android:textOff="SUN"
+                android:textSize="10sp"
+                android:id="@+id/toggle_sunday"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggle_monday"
+                android:textOff="MON"
+                android:textOn="MON"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggle_tuesday"
+                android:textOff="TUE"
+                android:textOn="TUE"
+                android:textSize="10sp"
+                android:visibility="visible"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggle_wednesday"
+                android:textOff="WED"
+                android:textOn="WED"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggle_thursday"
+                android:textOn="THU"
+                android:textSize="10sp"
+                android:textOff="THU"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggle_friday"
+                android:textOff="FRI"
+                android:textOn="FRI"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New ToggleButton"
+                android:id="@+id/toggle_saturday"
+                android:textOff="SAT"
+                android:textOn="SAT"
+                android:textSize="10sp"
+                android:singleLine="true"
+                android:capitalize="characters"
+                android:checked="false"
+                android:clickable="false"
+                android:elegantTextHeight="false"
+                android:enabled="true"
+                android:gravity="center"
+                android:layout_gravity="center"/>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
