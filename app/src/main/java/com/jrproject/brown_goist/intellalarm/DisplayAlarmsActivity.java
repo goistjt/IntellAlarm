@@ -44,10 +44,9 @@ public class DisplayAlarmsActivity extends ListActivity {
 
         Cursor cursor = alarmDataAdapter.getAlarmsCursor();
 //        String[] fromColumns = new String[]{AlarmDataAdapter.KEY_NAME, AlarmDataAdapter.KEY_HOUR,
-//                AlarmDataAdapter.KEY_MINUTE, AlarmDataAdapter.KEY_STATUS};
+//                AlarmDataAdapter.KEY_MINUTE};
 //        int[] toTextViews = new int[]{R.id.alarm_list_name_text_view,
-//                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view,
-//                R.id.alarm_on_switch};
+//                R.id.alarm_list_time_hour_text_view, R.id.alarm_list_time_minute_text_view};
 //        cursorAdaptor = new SimpleCursorAdapter(this, R.layout.alarm_list_item, cursor,
 //                fromColumns, toTextViews, 0);
         cursorAdaptor = new AlarmCursorAdapter(this, cursor, 0);
