@@ -11,13 +11,7 @@
  */
 package com.jrproject.brown_goist.intellalarm.preferences;
 
-import java.util.Calendar;
-
-import com.jrproject.brown_goist.intellalarm.Alarm;
-import com.jrproject.brown_goist.intellalarm.BaseActivity;
-import com.jrproject.brown_goist.intellalarm.R;
-import com.jrproject.brown_goist.intellalarm.database.Database;
-import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreference.Key;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -25,14 +19,12 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.support.v7.app.ActionBar;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,6 +39,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.jrproject.brown_goist.intellalarm.Alarm;
+import com.jrproject.brown_goist.intellalarm.BaseActivity;
+import com.jrproject.brown_goist.intellalarm.R;
+import com.jrproject.brown_goist.intellalarm.database.Database;
+import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreference.Key;
+
+import java.util.Calendar;
 
 public class AlarmPreferencesActivity extends BaseActivity {
 
@@ -63,7 +63,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// requestWindowFeature(Window.FEATURE_NO_TITLE);
-		ActionBar actionBar = getSupportActionBar();
+		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		setContentView(R.layout.alarm_preferences);
 

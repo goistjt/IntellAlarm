@@ -11,13 +11,11 @@
  */
 package com.jrproject.brown_goist.intellalarm;
 
-import java.lang.reflect.Field;
-
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +25,9 @@ import android.widget.Toast;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReciever;
 
-public abstract class BaseActivity  extends ActionBarActivity implements android.view.View.OnClickListener{
+import java.lang.reflect.Field;
+
+public abstract class BaseActivity  extends Activity implements android.view.View.OnClickListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
