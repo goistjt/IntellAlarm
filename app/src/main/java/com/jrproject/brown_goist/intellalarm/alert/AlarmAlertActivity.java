@@ -65,18 +65,6 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
 
 		this.setTitle(alarm.getAlarmName());
 
-		switch (alarm.getDifficulty()) {
-		case EASY:
-			mathProblem = new MathProblem(3);
-			break;
-		case MEDIUM:
-			mathProblem = new MathProblem(4);
-			break;
-		case HARD:
-			mathProblem = new MathProblem(5);
-			break;
-		}
-
 		answerString = String.valueOf(mathProblem.getAnswer());
 		if (answerString.endsWith(".0")) {
 			answerString = answerString.substring(0, answerString.length() - 2);

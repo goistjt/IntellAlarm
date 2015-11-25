@@ -150,10 +150,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							switch (alarmPreference.getKey()) {
-							case ALARM_DIFFICULTY:
-								Alarm.Difficulty d = Alarm.Difficulty.values()[which];
-								alarm.setDifficulty(d);
-								break;
 							case ALARM_TONE:
 								alarm.setAlarmTonePath(alarmPreferenceListAdapter.getAlarmTonePaths()[which]);
 								if (alarm.getAlarmTonePath() != null) {

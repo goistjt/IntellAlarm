@@ -28,25 +28,6 @@ import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReciever;
 
 public class Alarm implements Serializable {
 
-	public enum Difficulty{
-		EASY,
-		MEDIUM,
-		HARD;
-
-		@Override
-		public String toString() {
-			switch(this.ordinal()){
-				case 0:
-					return "Easy";
-				case 1:
-					return "Medium";
-				case 2:
-					return "Hard";
-			}
-			return super.toString();
-		}
-	}
-
 	public enum Day{
 		SUNDAY,
 		MONDAY,
@@ -86,7 +67,6 @@ public class Alarm implements Serializable {
 	private String alarmTonePath = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();
 	private Boolean vibrate = true;
 	private String alarmName = "Alarm Clock";
-	private Difficulty difficulty = Difficulty.EASY;
 
 	public Alarm() {
 
@@ -256,14 +236,6 @@ public class Alarm implements Serializable {
 	 */
 	public void setAlarmName(String alarmName) {
 		this.alarmName = alarmName;
-	}
-
-	public Difficulty getDifficulty() {
-		return difficulty;
-	}
-
-	public void setDifficulty(Difficulty difficulty) {
-		this.difficulty = difficulty;
 	}
 
 	public int getId() {
