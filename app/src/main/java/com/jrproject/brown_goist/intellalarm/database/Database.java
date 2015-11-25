@@ -246,6 +246,9 @@ public class Database extends SQLiteOpenHelper {
 
     public static Alarm getNextAlarm() {
         List<Alarm> alarms = getAll();
+        if(alarms.isEmpty()) {
+            return null;
+        }
         Collections.sort(alarms, new Comparator<Alarm>() {
             @Override
             public int compare(Alarm lhs, Alarm rhs) {
@@ -254,9 +257,6 @@ public class Database extends SQLiteOpenHelper {
                 return lhsTimeDiff > rhsTimeDiff ? -1 : rhsTimeDiff > lhsTimeDiff ? 1 : 0;
             }
         });
-        if(alarms.isEmpty()) {
-            return null;
-        }
         return alarms.get(0);
     }
 }
