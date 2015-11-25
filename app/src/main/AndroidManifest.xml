@@ -68,7 +68,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
         </activity>
 		<receiver android:name=".alert.AlarmAlertBroadcastReceiver" >
         </receiver>
-        <receiver android:name = ".telephony.PhoneStateChangedBroadcastReciever">
+        <receiver android:name = ".telephony.PhoneStateChangedBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
