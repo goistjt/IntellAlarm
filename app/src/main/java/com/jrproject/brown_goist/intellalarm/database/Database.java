@@ -36,234 +36,228 @@ import com.jrproject.brown_goist.intellalarm.Alarm;
  */
 
 public class Database extends SQLiteOpenHelper {
-	static Database instance = null;
-	static SQLiteDatabase database = null;
+    static Database instance = null;
+    static SQLiteDatabase database = null;
 
-	static final String DATABASE_NAME = "DB";
-	static final int DATABASE_VERSION = 1;
+    static final String DATABASE_NAME = "DB";
+    static final int DATABASE_VERSION = 1;
 
-	public static final String ALARM_TABLE = "alarm";
-	public static final String COLUMN_ALARM_ID = "_id";
-	public static final String COLUMN_ALARM_ACTIVE = "alarm_active";
-	public static final String COLUMN_ALARM_TIME = "alarm_time";
-	public static final String COLUMN_ALARM_DAYS = "alarm_days";
-	public static final String COLUMN_ALARM_TONE = "alarm_tone";
-	public static final String COLUMN_ALARM_VIBRATE = "alarm_vibrate";
-	public static final String COLUMN_ALARM_NAME = "alarm_name";
+    public static final String ALARM_TABLE = "alarm";
+    public static final String COLUMN_ALARM_ID = "_id";
+    public static final String COLUMN_ALARM_ACTIVE = "alarm_active";
+    public static final String COLUMN_ALARM_TIME = "alarm_time";
+    public static final String COLUMN_ALARM_DAYS = "alarm_days";
+    public static final String COLUMN_ALARM_TONE = "alarm_tone";
+    public static final String COLUMN_ALARM_VIBRATE = "alarm_vibrate";
+    public static final String COLUMN_ALARM_NAME = "alarm_name";
 
-	public static void init(Context context) {
-		if (null == instance) {
-			instance = new Database(context);
-		}
-	}
+    public static void init(Context context) {
+        if (null == instance) {
+            instance = new Database(context);
+        }
+    }
 
-	public static SQLiteDatabase getDatabase() {
-		if (null == database) {
-			database = instance.getWritableDatabase();
-		}
-		return database;
-	}
+    public static SQLiteDatabase getDatabase() {
+        if (null == database) {
+            database = instance.getWritableDatabase();
+        }
+        return database;
+    }
 
-	public static void deactivate() {
-		if (null != database && database.isOpen()) {
-			database.close();
-		}
-		database = null;
-		instance = null;
-	}
+    public static void deactivate() {
+        if (null != database && database.isOpen()) {
+            database.close();
+        }
+        database = null;
+        instance = null;
+    }
 
-	public static long create(Alarm alarm) {
-		ContentValues cv = new ContentValues();
-		cv.put(COLUMN_ALARM_ACTIVE, alarm.getAlarmActive());
-		cv.put(COLUMN_ALARM_TIME, alarm.getAlarmTimeString());
+    public static long create(Alarm alarm) {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_ALARM_ACTIVE, alarm.getAlarmActive());
+        cv.put(COLUMN_ALARM_TIME, alarm.getAlarmTimeString());
 
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		    ObjectOutputStream oos = null;
-		    oos = new ObjectOutputStream(bos);
-		    oos.writeObject(alarm.getDays());
-		    byte[] buff = bos.toByteArray();
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = null;
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(alarm.getDays());
+            byte[] buff = bos.toByteArray();
 
-		    cv.put(COLUMN_ALARM_DAYS, buff);
+            cv.put(COLUMN_ALARM_DAYS, buff);
 
-		} catch (Exception e){
-		}
+        } catch (Exception e) {
+        }
 
-		cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
-		cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
-		cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
+        cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
+        cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
+        cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
 
-		return getDatabase().insert(ALARM_TABLE, null, cv);
-	}
-	public static int update(Alarm alarm) {
-		ContentValues cv = new ContentValues();
-		cv.put(COLUMN_ALARM_ACTIVE, alarm.getAlarmActive());
-		cv.put(COLUMN_ALARM_TIME, alarm.getAlarmTimeString());
+        return getDatabase().insert(ALARM_TABLE, null, cv);
+    }
 
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		    ObjectOutputStream oos = null;
-		    oos = new ObjectOutputStream(bos);
-		    oos.writeObject(alarm.getDays());
-		    byte[] buff = bos.toByteArray();
+    public static int update(Alarm alarm) {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_ALARM_ACTIVE, alarm.getAlarmActive());
+        cv.put(COLUMN_ALARM_TIME, alarm.getAlarmTimeString());
 
-		    cv.put(COLUMN_ALARM_DAYS, buff);
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = null;
+            oos = new ObjectOutputStream(bos);
+            oos.writeObject(alarm.getDays());
+            byte[] buff = bos.toByteArray();
 
-		} catch (Exception e){
-		}
+            cv.put(COLUMN_ALARM_DAYS, buff);
 
-		cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
-		cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
-		cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
+        } catch (Exception e) {
+        }
 
-		return getDatabase().update(ALARM_TABLE, cv, "_id=" + alarm.getId(), null);
-	}
-	public static int deleteEntry(Alarm alarm){
-		return deleteEntry(alarm.getId());
-	}
+        cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
+        cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
+        cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
 
-	public static int deleteEntry(int id){
-		return getDatabase().delete(ALARM_TABLE, COLUMN_ALARM_ID + "=" + id, null);
-	}
+        return getDatabase().update(ALARM_TABLE, cv, "_id=" + alarm.getId(), null);
+    }
 
-	public static int deleteAll(){
-		return getDatabase().delete(ALARM_TABLE, "1", null);
-	}
+    public static int deleteEntry(Alarm alarm) {
+        return deleteEntry(alarm.getId());
+    }
 
-	public static Alarm getAlarm(int id) {
-		// TODO Auto-generated method stub
-		String[] columns = new String[] {
-				COLUMN_ALARM_ID,
-				COLUMN_ALARM_ACTIVE,
-				COLUMN_ALARM_TIME,
-				COLUMN_ALARM_DAYS,
-				COLUMN_ALARM_TONE,
-				COLUMN_ALARM_VIBRATE,
-				COLUMN_ALARM_NAME
-				};
-		Cursor c = getDatabase().query(ALARM_TABLE, columns, COLUMN_ALARM_ID+"="+id, null, null, null,
-				null);
-		Alarm alarm = null;
+    public static int deleteEntry(int id) {
+        return getDatabase().delete(ALARM_TABLE, COLUMN_ALARM_ID + "=" + id, null);
+    }
 
-		if(c.moveToFirst()){
+    public static int deleteAll() {
+        return getDatabase().delete(ALARM_TABLE, "1", null);
+    }
 
-			alarm =  new Alarm();
-			alarm.setId(c.getInt(1));
-			alarm.setAlarmActive(c.getInt(2)==1);
-			alarm.setAlarmTime(c.getString(3));
-			byte[] repeatDaysBytes = c.getBlob(4);
+    public static Alarm getAlarm(int id) {
+        // TODO Auto-generated method stub
+        String[] columns = new String[]{
+                COLUMN_ALARM_ID,
+                COLUMN_ALARM_ACTIVE,
+                COLUMN_ALARM_TIME,
+                COLUMN_ALARM_DAYS,
+                COLUMN_ALARM_TONE,
+                COLUMN_ALARM_VIBRATE,
+                COLUMN_ALARM_NAME
+        };
+        Cursor c = getDatabase().query(ALARM_TABLE, columns, COLUMN_ALARM_ID + "=" + id, null, null, null,
+                null);
+        Alarm alarm = null;
 
-			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(repeatDaysBytes);
-			try {
-				ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-				Alarm.Day[] repeatDays;
-				Object object = objectInputStream.readObject();
-				if(object instanceof Alarm.Day[]){
-					repeatDays = (Alarm.Day[]) object;
-					alarm.setDays(repeatDays);
-				}
-			} catch (StreamCorruptedException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+        if (c.moveToFirst()) {
 
-			alarm.setAlarmTonePath(c.getString(6));
-			alarm.setVibrate(c.getInt(7)==1);
-			alarm.setAlarmName(c.getString(8));
-		}
-		c.close();
-		return alarm;
-	}
+            alarm = new Alarm();
+            alarm.setId(c.getInt(1));
+            alarm.setAlarmActive(c.getInt(2) == 1);
+            alarm.setAlarmTime(c.getString(3));
+            byte[] repeatDaysBytes = c.getBlob(4);
 
-	public static Cursor getCursor() {
-		// TODO Auto-generated method stub
-		String[] columns = new String[] {
-				COLUMN_ALARM_ID,
-				COLUMN_ALARM_ACTIVE,
-				COLUMN_ALARM_TIME,
-				COLUMN_ALARM_DAYS,
-				COLUMN_ALARM_TONE,
-				COLUMN_ALARM_VIBRATE,
-				COLUMN_ALARM_NAME
-				};
-		return getDatabase().query(ALARM_TABLE, columns, null, null, null, null,
-				null);
-	}
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(repeatDaysBytes);
+            try {
+                ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+                Alarm.Day[] repeatDays;
+                Object object = objectInputStream.readObject();
+                if (object instanceof Alarm.Day[]) {
+                    repeatDays = (Alarm.Day[]) object;
+                    alarm.setDays(repeatDays);
+                }
+            } catch (StreamCorruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
-	Database(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
+            alarm.setAlarmTonePath(c.getString(6));
+            alarm.setVibrate(c.getInt(7) == 1);
+            alarm.setAlarmName(c.getString(8));
+        }
+        c.close();
+        return alarm;
+    }
 
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
-		db.execSQL("CREATE TABLE IF NOT EXISTS " + ALARM_TABLE + " ( "
-				+ COLUMN_ALARM_ID + " INTEGER primary key autoincrement, "
-				+ COLUMN_ALARM_ACTIVE + " INTEGER NOT NULL, "
-				+ COLUMN_ALARM_TIME + " TEXT NOT NULL, "
-				+ COLUMN_ALARM_DAYS + " BLOB NOT NULL, "
-				+ COLUMN_ALARM_TONE + " TEXT NOT NULL, "
-				+ COLUMN_ALARM_VIBRATE + " INTEGER NOT NULL, "
-				+ COLUMN_ALARM_NAME + " TEXT NOT NULL)");
-	}
+    public static Cursor getCursor() {
+        // TODO Auto-generated method stub
+        String[] columns = new String[]{
+                COLUMN_ALARM_ID,
+                COLUMN_ALARM_ACTIVE,
+                COLUMN_ALARM_TIME,
+                COLUMN_ALARM_DAYS,
+                COLUMN_ALARM_TONE,
+                COLUMN_ALARM_VIBRATE,
+                COLUMN_ALARM_NAME
+        };
+        return getDatabase().query(ALARM_TABLE, columns, null, null, null, null,
+                null);
+    }
 
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE);
-		onCreate(db);
-	}
+    Database(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
-	public static List<Alarm> getAll() {
-		List<Alarm> alarms = new ArrayList<Alarm>();
-		Cursor cursor = Database.getCursor();
-		if (cursor.moveToFirst()) {
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // TODO Auto-generated method stub
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + ALARM_TABLE + " ( "
+                + COLUMN_ALARM_ID + " INTEGER primary key autoincrement, "
+                + COLUMN_ALARM_ACTIVE + " INTEGER NOT NULL, "
+                + COLUMN_ALARM_TIME + " TEXT NOT NULL, "
+                + COLUMN_ALARM_DAYS + " BLOB NOT NULL, "
+                + COLUMN_ALARM_TONE + " TEXT NOT NULL, "
+                + COLUMN_ALARM_VIBRATE + " INTEGER NOT NULL, "
+                + COLUMN_ALARM_NAME + " TEXT NOT NULL)");
+    }
 
-			do {
-				// COLUMN_ALARM_ID,
-				// COLUMN_ALARM_ACTIVE,
-				// COLUMN_ALARM_TIME,
-				// COLUMN_ALARM_DAYS,
-				// COLUMN_ALARM_TONE,
-				// COLUMN_ALARM_VIBRATE,
-				// COLUMN_ALARM_NAME
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE);
+        onCreate(db);
+    }
 
-				Alarm alarm = new Alarm();
-				alarm.setId(cursor.getInt(0));
-				alarm.setAlarmActive(cursor.getInt(1) == 1);
-				alarm.setAlarmTime(cursor.getString(2));
-				byte[] repeatDaysBytes = cursor.getBlob(3);
+    public static List<Alarm> getAll() {
+        List<Alarm> alarms = new ArrayList<Alarm>();
+        Cursor cursor = Database.getCursor();
+        if (cursor.moveToFirst()) {
 
-				ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-						repeatDaysBytes);
-				try {
-					ObjectInputStream objectInputStream = new ObjectInputStream(
-							byteArrayInputStream);
-					Alarm.Day[] repeatDays;
-					Object object = objectInputStream.readObject();
-					if (object instanceof Alarm.Day[]) {
-						repeatDays = (Alarm.Day[]) object;
-						alarm.setDays(repeatDays);
-					}
-				} catch (StreamCorruptedException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}
+            do {
+                Alarm alarm = new Alarm();
+                alarm.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ALARM_ID)));
+                alarm.setAlarmActive(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ALARM_ACTIVE)) == 1);
+                alarm.setAlarmTime(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ALARM_TIME)));
+                byte[] repeatDaysBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(COLUMN_ALARM_DAYS));
 
-				alarm.setAlarmTonePath(cursor.getString(4));
-				alarm.setVibrate(cursor.getInt(5) == 1);
-				alarm.setAlarmName(cursor.getString(6));
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+                        repeatDaysBytes);
+                try {
+                    ObjectInputStream objectInputStream = new ObjectInputStream(
+                            byteArrayInputStream);
+                    Alarm.Day[] repeatDays;
+                    Object object = objectInputStream.readObject();
+                    if (object instanceof Alarm.Day[]) {
+                        repeatDays = (Alarm.Day[]) object;
+                        alarm.setDays(repeatDays);
+                    }
+                } catch (StreamCorruptedException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
 
-				alarms.add(alarm);
+                alarm.setAlarmTonePath(cursor.getString(cursor.getColumnIndex(COLUMN_ALARM_TONE)));
+                alarm.setVibrate(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ALARM_VIBRATE)) == 1);
+                alarm.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ALARM_NAME)));
 
-			} while (cursor.moveToNext());
-		}
-		cursor.close();
-		return alarms;
-	}
+                alarms.add(alarm);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return alarms;
+    }
 }
