@@ -226,7 +226,6 @@ public class Database extends SQLiteOpenHelper {
 				// COLUMN_ALARM_ACTIVE,
 				// COLUMN_ALARM_TIME,
 				// COLUMN_ALARM_DAYS,
-				// COLUMN_ALARM_DIFFICULTY,
 				// COLUMN_ALARM_TONE,
 				// COLUMN_ALARM_VIBRATE,
 				// COLUMN_ALARM_NAME
@@ -256,9 +255,9 @@ public class Database extends SQLiteOpenHelper {
 					e.printStackTrace();
 				}
 
-				alarm.setAlarmTonePath(cursor.getString(5));
-				alarm.setVibrate(cursor.getInt(6) == 1);
-				alarm.setAlarmName(cursor.getString(7));
+				alarm.setAlarmTonePath(cursor.getString(4));
+				alarm.setVibrate(cursor.getInt(5) == 1);
+				alarm.setAlarmName(cursor.getString(6));
 
 				alarms.add(alarm);
 
