@@ -19,8 +19,7 @@ public class AlarmPreference {
 		ALARM_TIME,
 		ALARM_REPEAT,
 		ALARM_TONE,
-		ALARM_VIBRATE,
-		ALARM_DIFFICULTY
+		ALARM_VIBRATE
 	}
 
 	public enum Type{
