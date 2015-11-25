@@ -104,6 +104,12 @@ public class AlarmActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        Database.deactivate();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         updateAlarmList();
