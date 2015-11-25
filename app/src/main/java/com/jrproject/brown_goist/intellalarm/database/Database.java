@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /*
@@ -240,5 +242,18 @@ public class Database extends SQLiteOpenHelper {
         }
         cursor.close();
         return alarms;
+    }
+
+    public static Alarm getNextAlarm() {
+        List<Alarm> alarms = getAll();
+        Collections.sort(alarms, new Comparator<Alarm>() {
+            @Override
+            public int compare(Alarm lhs, Alarm rhs) {
+                long lhsTimeDiff = lhs.getAlarmTime().getTimeInMillis() - System.currentTimeMillis();
+                long rhsTimeDiff = rhs.getAlarmTime().getTimeInMillis() - System.currentTimeMillis();
+                return lhsTimeDiff > rhsTimeDiff ? -1 : rhsTimeDiff > lhsTimeDiff ? 1 : 0;
+            }
+        });
+        return alarms.get(0);
     }
 }
