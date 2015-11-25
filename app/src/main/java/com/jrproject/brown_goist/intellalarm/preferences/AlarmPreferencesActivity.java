@@ -238,6 +238,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.findItem(R.id.menu_item_new).setVisible(false);
+        menu.findItem(R.id.menu_item_sleep).setVisible(false);
         return result;
     }
 
@@ -251,7 +252,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                 } else {
                     Database.update(getAlarm());
                 }
-                callMathAlarmScheduleService();
+                callAlarmScheduleService();
                 Toast.makeText(AlarmPreferencesActivity.this, getAlarm().getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
                 finish();
                 break;
@@ -265,7 +266,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         Database.init(getApplicationContext());
                         if (getAlarm().getId() >= 1) {
                             Database.deleteEntry(alarm);
-                            callMathAlarmScheduleService();
+                            callAlarmScheduleService();
                         } // Alarm not saved if id < 1
                         finish();
                     }

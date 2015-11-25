@@ -1,6 +1,8 @@
 package com.jrproject.brown_goist.intellalarm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,8 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
+import com.jrproject.brown_goist.intellalarm.database.Database;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
+import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
 
 import java.lang.reflect.Field;
 
@@ -46,12 +50,35 @@ public abstract class BaseActivity extends Activity implements android.view.View
                 Intent newAlarmIntent = new Intent(this, AlarmPreferencesActivity.class);
                 startActivity(newAlarmIntent);
                 break;
+            case R.id.menu_item_sleep:
+                callSleepActivity();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    protected void callMathAlarmScheduleService() {
-        Intent mathAlarmServiceIntent = new Intent(this, AlarmServiceBroadcastReceiver.class);
-        sendBroadcast(mathAlarmServiceIntent, null);
+    protected void callAlarmScheduleService() {
+        Intent alarmServiceIntent = new Intent(this, AlarmServiceBroadcastReceiver.class);
+        sendBroadcast(alarmServiceIntent, null);
+    }
+
+    protected void callSleepActivity() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(BaseActivity.this);
+        dialog.setTitle("Sleep");
+        dialog.setMessage("Start sleep monitoring now?");
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent startSleepIntent = new Intent(BaseActivity.this, SleepActivity.class);
+                startActivity(startSleepIntent);
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

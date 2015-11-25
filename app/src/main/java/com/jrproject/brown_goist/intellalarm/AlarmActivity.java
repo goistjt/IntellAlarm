@@ -58,7 +58,7 @@ public class AlarmActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Database.init(AlarmActivity.this);
                         Database.deleteEntry(alarm);
-                        AlarmActivity.this.callMathAlarmScheduleService();
+                        AlarmActivity.this.callAlarmScheduleService();
                         updateAlarmList();
                     }
                 });
@@ -73,7 +73,7 @@ public class AlarmActivity extends BaseActivity {
             }
         });
 
-        callMathAlarmScheduleService();
+        callAlarmScheduleService();
 
         alarmListAdapter = new AlarmListAdapter(this);
         this.alarmListView.setAdapter(alarmListAdapter);
@@ -133,7 +133,7 @@ public class AlarmActivity extends BaseActivity {
             Alarm alarm = (Alarm) alarmListAdapter.getItem((Integer) checkBox.getTag());
             alarm.setAlarmActive(checkBox.isChecked());
             Database.update(alarm);
-            AlarmActivity.this.callMathAlarmScheduleService();
+            AlarmActivity.this.callAlarmScheduleService();
             if (checkBox.isChecked()) {
                 Toast.makeText(AlarmActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_SHORT).show();
             }

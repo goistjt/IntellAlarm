@@ -21,6 +21,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
         appcompat:showAsAction="always">
     </item>
     <item
+        android:id="@+id/menu_item_sleep"
+        android:title="@string/menu_item_new"
+        android:icon="@drawable/sleep"
+        appcompat:showAsAction="always">
+    </item>
+    <item
         android:id="@+id/menu_item_save"
         android:title="@string/menu_item_save"
         android:icon="@drawable/glyphicons_443_floppy_disk"
