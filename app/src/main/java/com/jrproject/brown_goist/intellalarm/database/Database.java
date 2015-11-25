@@ -254,6 +254,9 @@ public class Database extends SQLiteOpenHelper {
                 return lhsTimeDiff > rhsTimeDiff ? -1 : rhsTimeDiff > lhsTimeDiff ? 1 : 0;
             }
         });
+        if(alarms.isEmpty()) {
+            return null;
+        }
         return alarms.get(0);
     }
 }
