@@ -1,24 +1,4 @@
-/* Copyright 2014 Sheldon Neilson www.neilson.co.za
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
- */
 package com.jrproject.brown_goist.intellalarm.database;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.StreamCorruptedException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,6 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  * usage:
@@ -52,20 +40,20 @@ public class Database extends SQLiteOpenHelper {
     public static final String COLUMN_ALARM_NAME = "alarm_name";
 
     public static void init(Context context) {
-        if (null == instance) {
+        if (instance == null) {
             instance = new Database(context);
         }
     }
 
     public static SQLiteDatabase getDatabase() {
-        if (null == database) {
+        if (database == null) {
             database = instance.getWritableDatabase();
         }
         return database;
     }
 
     public static void deactivate() {
-        if (null != database && database.isOpen()) {
+        if (database != null && database.isOpen()) {
             database.close();
         }
         database = null;
@@ -79,14 +67,15 @@ public class Database extends SQLiteOpenHelper {
 
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = null;
+            ObjectOutputStream oos;
             oos = new ObjectOutputStream(bos);
             oos.writeObject(alarm.getDays());
             byte[] buff = bos.toByteArray();
 
             cv.put(COLUMN_ALARM_DAYS, buff);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
@@ -103,14 +92,15 @@ public class Database extends SQLiteOpenHelper {
 
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = null;
+            ObjectOutputStream oos;
             oos = new ObjectOutputStream(bos);
             oos.writeObject(alarm.getDays());
             byte[] buff = bos.toByteArray();
 
             cv.put(COLUMN_ALARM_DAYS, buff);
 
-        } catch (Exception e) {
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
@@ -148,7 +138,6 @@ public class Database extends SQLiteOpenHelper {
         Alarm alarm = null;
 
         if (c.moveToFirst()) {
-
             alarm = new Alarm();
             alarm.setId(c.getInt(1));
             alarm.setAlarmActive(c.getInt(2) == 1);
@@ -164,11 +153,7 @@ public class Database extends SQLiteOpenHelper {
                     repeatDays = (Alarm.Day[]) object;
                     alarm.setDays(repeatDays);
                 }
-            } catch (StreamCorruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -219,7 +204,7 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public static List<Alarm> getAll() {
-        List<Alarm> alarms = new ArrayList<Alarm>();
+        List<Alarm> alarms = new ArrayList<>();
         Cursor cursor = Database.getCursor();
         if (cursor.moveToFirst()) {
 
@@ -241,11 +226,7 @@ public class Database extends SQLiteOpenHelper {
                         repeatDays = (Alarm.Day[]) object;
                         alarm.setDays(repeatDays);
                     }
-                } catch (StreamCorruptedException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ClassNotFoundException e) {
+                } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
 

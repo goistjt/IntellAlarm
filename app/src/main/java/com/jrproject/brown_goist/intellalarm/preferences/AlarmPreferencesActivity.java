@@ -40,6 +40,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
     private MediaPlayer mediaPlayer;
     private ListAdapter listAdapter;
     private ListView listView;
+    private CountDownTimer alarmToneTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +103,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                 if (alarmPreference.getKey() == Key.ALARM_NAME) {
                                     alarm.setAlarmName(alarmPreference.getValue().toString());
                                 }
-                                alarmPreferenceListAdapter.setMathAlarm(getAlarm());
+                                alarmPreferenceListAdapter.setAlarm(getAlarm());
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
                             }
                         });
@@ -166,7 +167,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                     default:
                                         break;
                                 }
-                                alarmPreferenceListAdapter.setMathAlarm(getAlarm());
+                                alarmPreferenceListAdapter.setAlarm(getAlarm());
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
                             }
 
@@ -176,9 +177,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         break;
                     case MULTIPLE_LIST:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-
                         alert.setTitle(alarmPreference.getTitle());
-                        // alert.setMessage(message);
 
                         CharSequence[] multiListItems = new CharSequence[alarmPreference.getOptions().length];
                         System.arraycopy(alarmPreference.getOptions(), 0, multiListItems, 0, multiListItems.length);
@@ -188,41 +187,33 @@ public class AlarmPreferencesActivity extends BaseActivity {
                             checkedItems[day.ordinal()] = true;
                         }
                         alert.setMultiChoiceItems(multiListItems, checkedItems, new OnMultiChoiceClickListener() {
-
                             @Override
                             public void onClick(final DialogInterface dialog, int which, boolean isChecked) {
-
                                 Alarm.Day thisDay = Alarm.Day.values()[which];
-
                                 if (isChecked) {
                                     alarm.addDay(thisDay);
                                 } else {
-                                    // Only remove the day if there are more than 1
-                                    // selected
+                                    // Only remove the day if there are more than 1 selected
                                     if (alarm.getDays().length > 1) {
                                         alarm.removeDay(thisDay);
                                     } else {
-                                        // If the last day was unchecked, re-check
-                                        // it
+                                        // If the last day was unchecked, re-check it
                                         ((AlertDialog) dialog).getListView().setItemChecked(which, true);
                                     }
                                 }
-
                             }
                         });
                         alert.setOnCancelListener(new OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
-                                alarmPreferenceListAdapter.setMathAlarm(getAlarm());
+                                alarmPreferenceListAdapter.setAlarm(getAlarm());
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
-
                             }
                         });
                         alert.show();
                         break;
                     case TIME:
                         TimePickerDialog timePickerDialog = new TimePickerDialog(AlarmPreferencesActivity.this, new OnTimeSetListener() {
-
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hours, int minutes) {
                                 Calendar newAlarmTime = Calendar.getInstance();
@@ -230,7 +221,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                 newAlarmTime.set(Calendar.MINUTE, minutes);
                                 newAlarmTime.set(Calendar.SECOND, 0);
                                 alarm.setAlarmTime(newAlarmTime);
-                                alarmPreferenceListAdapter.setMathAlarm(getAlarm());
+                                alarmPreferenceListAdapter.setAlarm(getAlarm());
                                 alarmPreferenceListAdapter.notifyDataSetChanged();
                             }
                         }, alarm.getAlarmTime().get(Calendar.HOUR_OF_DAY), alarm.getAlarmTime().get(Calendar.MINUTE), true);
@@ -269,35 +260,28 @@ public class AlarmPreferencesActivity extends BaseActivity {
                 dialog.setTitle("Delete");
                 dialog.setMessage("Delete this alarm?");
                 dialog.setPositiveButton("Ok", new OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         Database.init(getApplicationContext());
-                        if (getAlarm().getId() < 1) {
-                            // Alarm not saved
-                        } else {
+                        if (getAlarm().getId() >= 1) {
                             Database.deleteEntry(alarm);
                             callMathAlarmScheduleService();
-                        }
+                        } // Alarm not saved if id < 1
                         finish();
                     }
                 });
                 dialog.setNegativeButton("Cancel", new OnClickListener() {
-
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
                 dialog.show();
-
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private CountDownTimer alarmToneTimer;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -305,17 +289,12 @@ public class AlarmPreferencesActivity extends BaseActivity {
         outState.putSerializable("adapter", (AlarmPreferenceListAdapter) getListAdapter());
     }
 
-    ;
-
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            if (mediaPlayer != null)
-                mediaPlayer.release();
-        } catch (Exception e) {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
         }
-        // setListAdapter(null);
     }
 
     @Override
@@ -342,18 +321,20 @@ public class AlarmPreferencesActivity extends BaseActivity {
     }
 
     public ListView getListView() {
-        if (listView == null)
+        if (listView == null) {
             listView = (ListView) findViewById(android.R.id.list);
+        }
         return listView;
     }
 
+    /*
     public void setListView(ListView listView) {
         this.listView = listView;
     }
+    */
 
     @Override
     public void onClick(View v) {
-        // super.onClick(v);
 
     }
 }

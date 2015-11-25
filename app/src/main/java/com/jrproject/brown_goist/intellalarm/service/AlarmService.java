@@ -21,7 +21,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
-import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReciever;
+import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.database.Database;
 
 import java.util.Comparator;
@@ -78,7 +78,7 @@ public class AlarmService extends Service {
             alarm.schedule(getApplicationContext());
             Log.d(this.getClass().getSimpleName(), alarm.getTimeUntilNextAlarmMessage());
         } else {
-            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReciever.class);
+            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
             myIntent.putExtra("alarm", new Alarm());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);

@@ -22,9 +22,7 @@ import com.jrproject.brown_goist.intellalarm.R;
 public class AlarmAlertActivity extends Activity implements OnClickListener {
     private Alarm alarm;
     private MediaPlayer mediaPlayer;
-
     private Vibrator vibrator;
-
     private boolean alarmActive;
 
     @Override
