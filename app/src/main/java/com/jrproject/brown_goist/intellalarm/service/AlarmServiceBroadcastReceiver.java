@@ -16,11 +16,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-public class AlarmServiceBroadcastReciever extends BroadcastReceiver {
+public class AlarmServiceBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d("AlarmServiceBroadcastReciever", "onReceive()");
+		Log.d("ASBS", "onReceive()");
 		Intent serviceIntent = new Intent(context, AlarmService.class);
 		context.startService(serviceIntent);
 	}

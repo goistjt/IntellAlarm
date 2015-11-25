@@ -55,7 +55,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
             android:label="@string/app_name"
             >
         </service>
-		<receiver android:name=".service.AlarmServiceBroadcastReciever" >
+		<receiver android:name=".service.AlarmServiceBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

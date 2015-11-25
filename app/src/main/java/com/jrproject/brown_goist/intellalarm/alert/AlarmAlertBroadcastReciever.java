@@ -17,7 +17,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
-import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReciever;
+import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
 
 public class AlarmAlertBroadcastReciever extends BroadcastReceiver {
 
@@ -25,7 +25,7 @@ public class AlarmAlertBroadcastReciever extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Intent mathAlarmServiceIntent = new Intent(
 				context,
-				AlarmServiceBroadcastReciever.class);
+				AlarmServiceBroadcastReceiver.class);
 		context.sendBroadcast(mathAlarmServiceIntent, null);
 
 		StaticWakeLock.lockOn(context);

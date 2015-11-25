@@ -7,7 +7,8 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
  */
 package com.jrproject.brown_goist.intellalarm.service;
 
@@ -30,85 +31,61 @@ import java.util.TreeSet;
 
 public class AlarmService extends Service {
 
-	@Override
-	public IBinder onBind(Intent intent) {
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 
-		return null;
-	}
+    @Override
+    public void onCreate() {
+        Log.d(this.getClass().getSimpleName(), "onCreate()");
+        super.onCreate();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see android.app.Service#onCreate()
-	 */
-	@Override
-	public void onCreate() {
-		Log.d(this.getClass().getSimpleName(),"onCreate()");
-		super.onCreate();
-	}
+    private Alarm getNext() {
+        Set<Alarm> alarmQueue = new TreeSet<>(new Comparator<Alarm>() {
+            @Override
+            public int compare(Alarm lhs, Alarm rhs) {
+                long diff = lhs.getAlarmTime().getTimeInMillis() - rhs.getAlarmTime().getTimeInMillis();
+                return diff > 0 ? 1 : diff < 0 ? -1 : 0;
+            }
+        });
+        Database.init(getApplicationContext());
+        List<Alarm> alarms = Database.getAll();
 
-	private Alarm getNext(){
-		Set<Alarm> alarmQueue = new TreeSet<Alarm>(new Comparator<Alarm>() {
-			@Override
-			public int compare(Alarm lhs, Alarm rhs) {
-				int result = 0;
-				long diff = lhs.getAlarmTime().getTimeInMillis() - rhs.getAlarmTime().getTimeInMillis();
-				if(diff>0){
-					return 1;
-				}else if (diff < 0){
-					return -1;
-				}
-				return result;
-			}
-		});
+        for (Alarm alarm : alarms) {
+            if (alarm.getAlarmActive())
+                alarmQueue.add(alarm);
+        }
+        if (alarmQueue.iterator().hasNext()) {
+            return alarmQueue.iterator().next();
+        } else {
+            return null;
+        }
+    }
 
-		Database.init(getApplicationContext());
-		List<Alarm> alarms = Database.getAll();
+    @Override
+    public void onDestroy() {
+        Database.deactivate();
+        super.onDestroy();
+    }
 
-		for(Alarm alarm : alarms){
-			if(alarm.getAlarmActive())
-				alarmQueue.add(alarm);
-		}
-		if(alarmQueue.iterator().hasNext()){
-			return alarmQueue.iterator().next();
-		}else{
-			return null;
-		}
-	}
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see android.app.Service#onDestroy()
-	 */
-	@Override
-	public void onDestroy() {
-		Database.deactivate();
-		super.onDestroy();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see android.app.Service#onStartCommand(android.content.Intent, int, int)
-	 */
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		Log.d(this.getClass().getSimpleName(),"onStartCommand()");
-		Alarm alarm = getNext();
-		if(null != alarm){
-			alarm.schedule(getApplicationContext());
-			Log.d(this.getClass().getSimpleName(),alarm.getTimeUntilNextAlarmMessage());
-
-		}else{
-			Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReciever.class);
-			myIntent.putExtra("alarm", new Alarm());
-
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,PendingIntent.FLAG_CANCEL_CURRENT);
-			AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-
-			alarmManager.cancel(pendingIntent);
-		}
-		return START_NOT_STICKY;
-	}
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(this.getClass().getSimpleName(), "onStartCommand()");
+        Alarm alarm = getNext();
+        if (alarm != null) {
+            alarm.schedule(getApplicationContext());
+            Log.d(this.getClass().getSimpleName(), alarm.getTimeUntilNextAlarmMessage());
+        } else {
+            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReciever.class);
+            myIntent.putExtra("alarm", new Alarm());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+        }
+        return START_NOT_STICKY;
+    }
 
 }
