@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<!--
 Copyright 2014 Sheldon Neilson www.neilson.co.za
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,8 +30,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
         android:id="@+id/menu_item_delete"
         android:title="@string/menu_item_delete"
         android:icon="@drawable/glyphicons_016_bin"
-        appcompat:showAsAction="always">
-    </item>    
+        appcompat:showAsAction="ifRoom">
+    </item>
     <item
         android:id="@+id/menu_item_rate"
         android:title="@string/menu_item_rate"
@@ -43,7 +43,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
         android:title="@string/menu_item_website">
     </item>
     <item
-        android:id="@+id/menu_item_report"     
+        android:id="@+id/menu_item_report"
         android:title="@string/menu_item_report"
         android:icon="@drawable/glyphicons_340_globe">
     </item>
