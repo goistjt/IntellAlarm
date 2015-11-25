@@ -22,7 +22,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
     </item>
     <item
         android:id="@+id/menu_item_sleep"
-        android:title="@string/menu_item_new"
+        android:title="@string/menu_item_sleep"
         android:icon="@drawable/sleep"
         appcompat:showAsAction="always">
     </item>

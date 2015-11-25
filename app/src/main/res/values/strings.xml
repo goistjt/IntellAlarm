@@ -24,5 +24,6 @@
 
     <string name="sleep_activity_alarm_time">00:00</string>
     <string name="sleep_activity_awake_button">Awake</string>
+    <string name="menu_item_sleep">Sleep</string>
 
 </resources>
