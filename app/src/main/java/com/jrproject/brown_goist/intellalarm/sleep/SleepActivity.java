@@ -8,18 +8,28 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.R;
+import com.jrproject.brown_goist.intellalarm.database.Database;
 
 public class SleepActivity extends Activity {
 
     Button awakeButton;
+    TextView alarmTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sleep_activity);
+
+        alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
+        Alarm nextAlarm = Database.getNextAlarm();
+        if (nextAlarm != null) {
+            alarmTime.setText(nextAlarm.getAlarmTimeString());
+        }
 
         awakeButton = (Button) findViewById(R.id.sleep_activity_awake_button);
         awakeButton.setLongClickable(true);
