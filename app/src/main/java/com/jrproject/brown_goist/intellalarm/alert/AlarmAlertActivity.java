@@ -113,8 +113,12 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         if (vibrator != null)
             vibrator.cancel();
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        try {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 
@@ -125,12 +129,13 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         }
         v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         alarmActive = false;
-        if (vibrator != null) {
-            vibrator.cancel();
+        try {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        mediaPlayer.stop();
-        mediaPlayer.release();
-        this.finish();
+        finish();
     }
 
 }
