@@ -1,8 +1,14 @@
 package com.jrproject.brown_goist.intellalarm.sleep;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,11 +21,15 @@ import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.database.Database;
 
-public class SleepActivity extends Activity implements View.OnLongClickListener {
+public class SleepActivity extends Activity implements View.OnLongClickListener, SensorEventListener {
 
     Button awakeButton;
     TextView alarmTime;
     static Activity parentActivity;
+    SensorManager sensorManager;
+    Sensor accelerometer;
+
+    public static final int SENSOR_DELAY = 200000; //200ms
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +49,15 @@ public class SleepActivity extends Activity implements View.OnLongClickListener 
         awakeButton = (Button) findViewById(R.id.sleep_activity_awake_button);
         awakeButton.setLongClickable(true);
         awakeButton.setOnLongClickListener(this);
+
+        // Setting up sensor. Automatically registers listener as defined in onResume()
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
+            Log.d("SleepSensor", "Linear Accelerometer Exists");
+            accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        } else {
+            Log.d("SleepSensor", "Linear Accelerometer Does Not Exist");
+        }
     }
 
     @Override
@@ -73,5 +92,30 @@ public class SleepActivity extends Activity implements View.OnLongClickListener 
 
     public static Activity getActivity() {
         return parentActivity;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+        Log.v("SleepSensor", "X: " + x + "\n" + "Y: " + y + "\n" + "Z: " + z);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sensorManager.registerListener(this, accelerometer, SENSOR_DELAY);
     }
 }
