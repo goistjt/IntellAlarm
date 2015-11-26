@@ -18,6 +18,7 @@ import android.view.WindowManager;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.R;
+import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
 
 public class AlarmAlertActivity extends Activity implements OnClickListener {
     private Alarm alarm;
@@ -135,6 +136,7 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        SleepActivity.getActivity().finish();
         finish();
     }
 

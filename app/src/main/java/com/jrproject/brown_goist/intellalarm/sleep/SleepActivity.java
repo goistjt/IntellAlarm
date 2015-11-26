@@ -15,15 +15,19 @@ import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.database.Database;
 
-public class SleepActivity extends Activity {
+public class SleepActivity extends Activity implements View.OnLongClickListener {
 
     Button awakeButton;
     TextView alarmTime;
+    static Activity parentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sleep_activity);
+
+        parentActivity = this;
+
         Database.init(this);
 
         alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
@@ -34,15 +38,7 @@ public class SleepActivity extends Activity {
 
         awakeButton = (Button) findViewById(R.id.sleep_activity_awake_button);
         awakeButton.setLongClickable(true);
-        awakeButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                Intent alarmActivityIntent = new Intent(SleepActivity.this, AlarmActivity.class);
-                startActivity(alarmActivityIntent);
-                return true;
-            }
-        });
+        awakeButton.setOnLongClickListener(this);
     }
 
     @Override
@@ -59,6 +55,23 @@ public class SleepActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        stopSleepTracking();
         super.onDestroy();
+    }
+
+    private void stopSleepTracking() {
+        //stop data collection
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+        Intent alarmActivityIntent = new Intent(SleepActivity.this, AlarmActivity.class);
+        startActivity(alarmActivityIntent);
+        return true;
+    }
+
+    public static Activity getActivity() {
+        return parentActivity;
     }
 }
