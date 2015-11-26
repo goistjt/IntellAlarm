@@ -24,6 +24,7 @@ public class SleepActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sleep_activity);
+        Database.init(this);
 
         alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
         Alarm nextAlarm = Database.getNextAlarm();
