@@ -25,8 +25,8 @@ import java.util.List;
  * DatabaseSetup.deactivate() then job done
  */
 
-public class Database extends SQLiteOpenHelper {
-    static Database instance = null;
+public class AlarmDatabase extends SQLiteOpenHelper {
+    static AlarmDatabase instance = null;
     static SQLiteDatabase database = null;
 
     static final String DATABASE_NAME = "DB";
@@ -43,7 +43,7 @@ public class Database extends SQLiteOpenHelper {
 
     public static void init(Context context) {
         if (instance == null) {
-            instance = new Database(context);
+            instance = new AlarmDatabase(context);
         }
     }
 
@@ -182,7 +182,7 @@ public class Database extends SQLiteOpenHelper {
                 null);
     }
 
-    Database(Context context) {
+    AlarmDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -207,7 +207,7 @@ public class Database extends SQLiteOpenHelper {
 
     public static List<Alarm> getAll() {
         List<Alarm> alarms = new ArrayList<>();
-        Cursor cursor = Database.getCursor();
+        Cursor cursor = AlarmDatabase.getCursor();
         if (cursor.moveToFirst()) {
 
             do {

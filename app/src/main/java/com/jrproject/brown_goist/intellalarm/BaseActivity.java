@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
-import com.jrproject.brown_goist.intellalarm.database.Database;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;

@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
-import com.jrproject.brown_goist.intellalarm.database.Database;
+import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 
 import java.util.Comparator;
 import java.util.List;
@@ -50,8 +50,8 @@ public class AlarmService extends Service {
                 return diff > 0 ? 1 : diff < 0 ? -1 : 0;
             }
         });
-        Database.init(getApplicationContext());
-        List<Alarm> alarms = Database.getAll();
+        AlarmDatabase.init(getApplicationContext());
+        List<Alarm> alarms = AlarmDatabase.getAll();
 
         for (Alarm alarm : alarms) {
             if (alarm.getAlarmActive())
@@ -66,7 +66,7 @@ public class AlarmService extends Service {
 
     @Override
     public void onDestroy() {
-        Database.deactivate();
+        AlarmDatabase.deactivate();
         super.onDestroy();
     }
 

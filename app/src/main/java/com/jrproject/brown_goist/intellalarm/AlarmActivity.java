@@ -28,7 +28,7 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.jrproject.brown_goist.intellalarm.database.Database;
+import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 
 import java.util.List;
@@ -56,8 +56,8 @@ public class AlarmActivity extends BaseActivity {
                 dialog.setPositiveButton("Ok", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Database.init(AlarmActivity.this);
-                        Database.deleteEntry(alarm);
+                        AlarmDatabase.init(AlarmActivity.this);
+                        AlarmDatabase.deleteEntry(alarm);
                         AlarmActivity.this.callAlarmScheduleService();
                         updateAlarmList();
                     }
@@ -99,13 +99,13 @@ public class AlarmActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        Database.deactivate();
+        AlarmDatabase.deactivate();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        Database.deactivate();
+        AlarmDatabase.deactivate();
         super.onDestroy();
     }
 
@@ -116,8 +116,8 @@ public class AlarmActivity extends BaseActivity {
     }
 
     public void updateAlarmList() {
-        Database.init(AlarmActivity.this);
-        final List<Alarm> alarms = Database.getAll();
+        AlarmDatabase.init(AlarmActivity.this);
+        final List<Alarm> alarms = AlarmDatabase.getAll();
         alarmListAdapter.setAlarms(alarms);
 
         runOnUiThread(new Runnable() {
@@ -138,7 +138,7 @@ public class AlarmActivity extends BaseActivity {
             CheckBox checkBox = (CheckBox) v;
             Alarm alarm = (Alarm) alarmListAdapter.getItem((Integer) checkBox.getTag());
             alarm.setAlarmActive(checkBox.isChecked());
-            Database.update(alarm);
+            AlarmDatabase.update(alarm);
             AlarmActivity.this.callAlarmScheduleService();
             if (checkBox.isChecked()) {
                 Toast.makeText(AlarmActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_SHORT).show();

@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.R;
-import com.jrproject.brown_goist.intellalarm.database.Database;
+import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 
 public class SleepActivity extends Activity implements View.OnLongClickListener, SensorEventListener {
 
@@ -38,10 +38,10 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
         parentActivity = this;
 
-        Database.init(this);
+        AlarmDatabase.init(this);
 
         alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
-        Alarm nextAlarm = Database.getNextAlarm();
+        Alarm nextAlarm = AlarmDatabase.getNextAlarm();
         if (nextAlarm != null) {
             alarmTime.setText(nextAlarm.getAlarmTimeString());
         }

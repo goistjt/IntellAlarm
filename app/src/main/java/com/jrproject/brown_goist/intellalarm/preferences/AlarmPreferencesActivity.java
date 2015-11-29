@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
-import com.jrproject.brown_goist.intellalarm.database.Database;
+import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreference.Key;
 
 import java.util.Calendar;
@@ -251,11 +251,11 @@ public class AlarmPreferencesActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_save:
-                Database.init(getApplicationContext());
+                AlarmDatabase.init(getApplicationContext());
                 if (getAlarm().getId() < 1) {
-                    Database.create(getAlarm());
+                    AlarmDatabase.create(getAlarm());
                 } else {
-                    Database.update(getAlarm());
+                    AlarmDatabase.update(getAlarm());
                 }
                 callAlarmScheduleService();
                 Toast.makeText(AlarmPreferencesActivity.this, getAlarm().getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
@@ -268,9 +268,9 @@ public class AlarmPreferencesActivity extends BaseActivity {
                 dialog.setPositiveButton("Ok", new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Database.init(getApplicationContext());
+                        AlarmDatabase.init(getApplicationContext());
                         if (getAlarm().getId() >= 1) {
-                            Database.deleteEntry(alarm);
+                            AlarmDatabase.deleteEntry(alarm);
                             callAlarmScheduleService();
                         } // Alarm not saved if id < 1
                         finish();
