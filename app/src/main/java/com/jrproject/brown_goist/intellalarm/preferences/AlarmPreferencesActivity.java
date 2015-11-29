@@ -8,9 +8,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
@@ -109,72 +107,72 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         });
                         alert.show();
                         break;
-                    case LIST:
-                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
-                        alert.setTitle(alarmPreference.getTitle());
+//                    case LIST:
+//                        alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
+//                        alert.setTitle(alarmPreference.getTitle());
+//
+//                        CharSequence[] items = new CharSequence[alarmPreference.getOptions().length];
+//                        System.arraycopy(alarmPreference.getOptions(), 0, items, 0, items.length);
+//
+//                        alert.setItems(items, new OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                switch (alarmPreference.getKey()) {
+//                                    case ALARM_TONE:
+//                                        alarm.setAlarmTonePath(alarmPreferenceListAdapter.getAlarmTonePaths()[which]);
+//                                        if (alarm.getAlarmTonePath() != null) {
+//                                            if (mediaPlayer == null) {
+//                                                mediaPlayer = new MediaPlayer();
+//                                            } else {
+//                                                if (mediaPlayer.isPlaying())
+//                                                    mediaPlayer.stop();
+//                                                mediaPlayer.reset();
+//                                            }
+//                                            try {
+//                                                // mediaPlayer.setVolume(1.0f, 1.0f);
+//                                                mediaPlayer.setVolume(0.2f, 0.2f);
+//                                                mediaPlayer.setDataSource(AlarmPreferencesActivity.this, Uri.parse(alarm.getAlarmTonePath
+//                                                        ()));
+//                                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+//                                                mediaPlayer.setLooping(false);
+//                                                mediaPlayer.prepare();
+//                                                mediaPlayer.start();
+//
+//                                                // Force the mediaPlayer to stop after 3 seconds
+//                                                if (alarmToneTimer != null)
+//                                                    alarmToneTimer.cancel();
+//                                                alarmToneTimer = new CountDownTimer(3000, 3000) {
+//                                                    @Override
+//                                                    public void onTick(long millisUntilFinished) {
+//
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onFinish() {
+//                                                        if (mediaPlayer.isPlaying()) {
+//                                                            mediaPlayer.stop();
+//                                                        }
+//                                                    }
+//                                                };
+//                                                alarmToneTimer.start();
+//                                            } catch (Exception e) {
+//                                                if (mediaPlayer.isPlaying()) {
+//                                                    mediaPlayer.stop();
+//                                                }
+//                                            }
+//                                        }
+//                                        break;
+//                                    default:
+//                                        break;
+//                                }
+//                                alarmPreferenceListAdapter.setAlarm(getAlarm());
+//                                alarmPreferenceListAdapter.notifyDataSetChanged();
+//                            }
+//
+//                        });
 
-                        CharSequence[] items = new CharSequence[alarmPreference.getOptions().length];
-                        System.arraycopy(alarmPreference.getOptions(), 0, items, 0, items.length);
-
-                        alert.setItems(items, new OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (alarmPreference.getKey()) {
-                                    case ALARM_TONE:
-                                        alarm.setAlarmTonePath(alarmPreferenceListAdapter.getAlarmTonePaths()[which]);
-                                        if (alarm.getAlarmTonePath() != null) {
-                                            if (mediaPlayer == null) {
-                                                mediaPlayer = new MediaPlayer();
-                                            } else {
-                                                if (mediaPlayer.isPlaying())
-                                                    mediaPlayer.stop();
-                                                mediaPlayer.reset();
-                                            }
-                                            try {
-                                                // mediaPlayer.setVolume(1.0f, 1.0f);
-                                                mediaPlayer.setVolume(0.2f, 0.2f);
-                                                mediaPlayer.setDataSource(AlarmPreferencesActivity.this, Uri.parse(alarm.getAlarmTonePath
-                                                        ()));
-                                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                                                mediaPlayer.setLooping(false);
-                                                mediaPlayer.prepare();
-                                                mediaPlayer.start();
-
-                                                // Force the mediaPlayer to stop after 3 seconds
-                                                if (alarmToneTimer != null)
-                                                    alarmToneTimer.cancel();
-                                                alarmToneTimer = new CountDownTimer(3000, 3000) {
-                                                    @Override
-                                                    public void onTick(long millisUntilFinished) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onFinish() {
-                                                        if (mediaPlayer.isPlaying()) {
-                                                            mediaPlayer.stop();
-                                                        }
-                                                    }
-                                                };
-                                                alarmToneTimer.start();
-                                            } catch (Exception e) {
-                                                if (mediaPlayer.isPlaying()) {
-                                                    mediaPlayer.stop();
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                alarmPreferenceListAdapter.setAlarm(getAlarm());
-                                alarmPreferenceListAdapter.notifyDataSetChanged();
-                            }
-
-                        });
-
-                        alert.show();
-                        break;
+//                        alert.show();
+//                        break;
                     case MULTIPLE_LIST:
                         alert = new AlertDialog.Builder(AlarmPreferencesActivity.this);
                         alert.setTitle(alarmPreference.getTitle());

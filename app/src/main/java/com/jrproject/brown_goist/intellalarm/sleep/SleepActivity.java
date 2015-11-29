@@ -77,12 +77,8 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
     @Override
     protected void onDestroy() {
-        stopSleepTracking();
+        sensorManager.unregisterListener(this);
         super.onDestroy();
-    }
-
-    private void stopSleepTracking() {
-        //stop data collection
     }
 
     @Override
