@@ -60,4 +60,8 @@ public class SensorData {
         Date date = new Date();
         this.timeStamp = dateFormat.format(date);
     }
+
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 }
