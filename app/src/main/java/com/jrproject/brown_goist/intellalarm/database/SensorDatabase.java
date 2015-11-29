@@ -74,12 +74,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
         return getDatabase().insert(SENSOR_TABLE, null, cv);
     }
 
-    public static String getDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
-
     public static int deleteEntry(SensorData data) {
         return deleteEntry(data.getId());
     }
