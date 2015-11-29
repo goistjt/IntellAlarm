@@ -19,7 +19,9 @@ import android.widget.TextView;
 import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.R;
+import com.jrproject.brown_goist.intellalarm.SensorData;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
+import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
 
 public class SleepActivity extends Activity implements View.OnLongClickListener, SensorEventListener {
 
@@ -39,6 +41,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         parentActivity = this;
 
         AlarmDatabase.init(this);
+        SensorDatabase.init(this);
 
         alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
         Alarm nextAlarm = AlarmDatabase.getNextAlarm();
@@ -96,10 +99,12 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float x = event.values[0];
-        float y = event.values[1];
-        float z = event.values[2];
-        Log.v("SleepSensor", "X: " + x + "\n" + "Y: " + y + "\n" + "Z: " + z);
+        SensorData sensorData = new SensorData();
+        sensorData.setxValue(event.values[0]);
+        sensorData.setyValue(event.values[1]);
+        sensorData.setzValue(event.values[2]);
+        sensorData.setTimeStamp();
+        SensorDatabase.create(sensorData);
     }
 
     @Override
