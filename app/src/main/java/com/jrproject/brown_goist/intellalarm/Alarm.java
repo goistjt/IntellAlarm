@@ -151,6 +151,7 @@ public class Alarm implements Serializable {
                 Collections.addAll(result, getDays());
                 result.add(day);
                 setDays(result.toArray(new Day[result.size()]));
+                return;
             }
         }
     }
