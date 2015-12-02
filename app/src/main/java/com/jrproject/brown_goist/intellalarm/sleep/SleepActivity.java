@@ -100,7 +100,6 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         sensorData.setyValue(event.values[1]);
         sensorData.setzValue(event.values[2]);
         sensorData.setTimeStamp();
-        Log.v("SleepSensor", "X: " + event.values[0] + "\n" + "Y: " + event.values[1] + "\n" + "Z: " + event.values[3]);
         SensorDatabase.create(sensorData);
     }
 
