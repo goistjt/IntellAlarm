@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
+import com.jrproject.brown_goist.intellalarm.graph.GraphActivity;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
@@ -52,6 +53,9 @@ public abstract class BaseActivity extends Activity implements android.view.View
             case R.id.menu_item_sleep:
                 callSleepActivity();
                 break;
+            case R.id.menu_item_graph:
+                Intent graphIntent = new Intent(this, GraphActivity.class);
+                startActivity(graphIntent);
         }
         return super.onOptionsItemSelected(item);
     }

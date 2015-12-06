@@ -39,4 +39,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
         appcompat:showAsAction="always">
     </item>
 
+    <item
+        android:id="@+id/menu_item_graph"
+        android:title="@string/menu_item_graph"
+        android:icon="@drawable/chart-up-glyph-icon"
+        appcompat:showAsAction="always">
+    </item>
+
 </menu>
