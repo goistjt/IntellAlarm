@@ -25,11 +25,11 @@ import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
 
 public class SleepActivity extends Activity implements View.OnLongClickListener, SensorEventListener {
 
-    Button awakeButton;
-    TextView alarmTime;
+    private Button awakeButton;
+    private TextView alarmTime;
     static Activity parentActivity;
-    SensorManager sensorManager;
-    Sensor accelerometer;
+    private SensorManager sensorManager;
+    private Sensor accelerometer;
 
     public static final int SENSOR_DELAY = 200000; //200ms
 
@@ -61,6 +61,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         } else {
             Log.d("SleepSensor", "Linear Accelerometer Does Not Exist");
         }
+
     }
 
     @Override
