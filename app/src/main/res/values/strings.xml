@@ -26,5 +26,6 @@
     <string name="sleep_activity_awake_button">Awake</string>
     <string name="menu_item_sleep">Sleep</string>
     <string name="menu_item_graph">Stats</string>
+    <string name="menu_item_alarm_list">Alarms</string>
 
 </resources>

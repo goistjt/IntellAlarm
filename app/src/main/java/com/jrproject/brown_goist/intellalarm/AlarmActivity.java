@@ -94,6 +94,7 @@ public class AlarmActivity extends BaseActivity {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.findItem(R.id.menu_item_save).setVisible(false);
         menu.findItem(R.id.menu_item_delete).setVisible(false);
+        menu.findItem(R.id.menu_item_alarm_list).setVisible(false);
         return result;
     }
 

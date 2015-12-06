@@ -56,6 +56,11 @@ public abstract class BaseActivity extends Activity implements android.view.View
             case R.id.menu_item_graph:
                 Intent graphIntent = new Intent(this, GraphActivity.class);
                 startActivity(graphIntent);
+                break;
+            case R.id.menu_item_alarm_list:
+                Intent alarmListIntent = new Intent(this, AlarmActivity.class);
+                startActivity(alarmListIntent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

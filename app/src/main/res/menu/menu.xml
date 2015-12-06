@@ -46,4 +46,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
         appcompat:showAsAction="always">
     </item>
 
+    <item
+        android:id="@+id/menu_item_alarm_list"
+        android:title="@string/menu_item_alarm_list"
+        android:icon="@drawable/alarm_icon"
+        appcompat:showAsAction="always">
+    </item>
+
 </menu>

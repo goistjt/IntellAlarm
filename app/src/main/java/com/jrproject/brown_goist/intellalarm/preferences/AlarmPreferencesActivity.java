@@ -245,6 +245,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
         menu.findItem(R.id.menu_item_new).setVisible(false);
         menu.findItem(R.id.menu_item_sleep).setVisible(false);
         menu.findItem(R.id.menu_item_graph).setVisible(false);
+        menu.findItem(R.id.menu_item_alarm_list).setVisible(false);
         return result;
     }
 
