@@ -46,19 +46,6 @@ public class GraphActivity extends BaseActivity{
 
     public void updateGraphs() {
         SensorDatabase.init(GraphActivity.this);
-//        final List<Alarm> alarms = AlarmDatabase.getAll();
-//        alarmListAdapter.setAlarms(alarms);
-//
-//        runOnUiThread(new Runnable() {
-//            public void run() {
-//                AlarmActivity.this.alarmListAdapter.notifyDataSetChanged();
-//                if (alarms.size() > 0) {
-//                    findViewById(android.R.id.empty).setVisibility(View.INVISIBLE);
-//                } else {
-//                    findViewById(android.R.id.empty).setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
     }
 
     @Override
