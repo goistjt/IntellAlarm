@@ -6,10 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.Legend;
@@ -42,6 +39,8 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
             ColorTemplate.VORDIPLOM_COLORS[3],
             ColorTemplate.VORDIPLOM_COLORS[4]
     };
+
+    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +125,7 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
     }
 
     public void updateGraph(String graphType) {
+        df.setTimeZone(TimeZone.getDefault());
         SensorDatabase.init(GraphActivity.this);
         mChart.resetTracking();
 
@@ -134,12 +134,24 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         List<SensorData> sd = graphType.equals("day") ? SensorDatabase.getDay() : graphType.equals("week") ?
                 SensorDatabase.getWeek() : SensorDatabase.getMonth();
 
-        for (int i = 0; i < sd.size(); i++) {
-            long time = sd.get(i).getTimeStamp();
-            Date d = new Date(time);
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS", Locale.getDefault());
-            df.setTimeZone(TimeZone.getDefault());
-            xVals.add(df.format(d).substring(11));
+//        for (int i = 0; i < sd.size(); i++) {
+//            long time = sd.get(i).getTimeStamp();
+//            Date d = new Date(time);
+//            xVals.add(df.format(d).substring(11));
+//        }
+
+        SensorData prev = null;
+        for(SensorData s : sd) {
+            long curTime = s.getTimeStamp();
+            try {
+                while(curTime >= prev.getTimeStamp() + 1000) {
+                    xVals.add(df.format(new Date(curTime)).substring(11));
+                    curTime+=200;
+                }
+            } catch (NullPointerException npe) {
+//                npe.printStackTrace();
+                xVals.add(df.format(new Date(curTime)).substring(11));
+            }
         }
 
         ArrayList<LineDataSet> dataSets = new ArrayList<>();
