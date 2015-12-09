@@ -14,7 +14,9 @@
     <string name="menu_item_rate">Rate on Google Play</string>
     <string name="menu_item_website">Website</string>
     <string name="menu_item_report">Report a Bug</string>
-	
+    <string name="menu_item_sleep">Sleep</string>
+    <string name="menu_item_graph">Stats</string>
+    <string name="menu_item_alarm_list">Alarms</string>
 	
 	<color name="title_background_color">#000000</color>
 		
@@ -24,8 +26,9 @@
 
     <string name="sleep_activity_alarm_time">00:00</string>
     <string name="sleep_activity_awake_button">Awake</string>
-    <string name="menu_item_sleep">Sleep</string>
-    <string name="menu_item_graph">Stats</string>
-    <string name="menu_item_alarm_list">Alarms</string>
+
+    <string name="graph_activity_button_day">Day</string>
+    <string name="graph_activity_button_month">Month</string>
+    <string name="graph_activity_button_week">Week</string>
 
 </resources>

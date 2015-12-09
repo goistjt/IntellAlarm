@@ -130,6 +130,38 @@ public class SensorDatabase extends SQLiteOpenHelper {
                         COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
     }
 
+    public static Cursor getCursorWeek() {
+        // TODO Auto-generated method stub
+        long currDateTime = System.currentTimeMillis();
+        long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 7 * 1000;
+        String[] columns = new String[]{
+                COLUMN_SENSOR_ID,
+                COLUMN_SENSOR_X,
+                COLUMN_SENSOR_Y,
+                COLUMN_SENSOR_Z,
+                COLUMN_SENSOR_TIMESTAMP
+        };
+        return getDatabase().query(SENSOR_TABLE, columns,
+                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
+                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
+    }
+
+    public static Cursor getCursorMonth() {
+        // TODO Auto-generated method stub
+        long currDateTime = System.currentTimeMillis();
+        long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 1000;
+        String[] columns = new String[]{
+                COLUMN_SENSOR_ID,
+                COLUMN_SENSOR_X,
+                COLUMN_SENSOR_Y,
+                COLUMN_SENSOR_Z,
+                COLUMN_SENSOR_TIMESTAMP
+        };
+        return getDatabase().query(SENSOR_TABLE, columns,
+                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
+                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
+    }
+
     SensorDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -175,6 +207,48 @@ public class SensorDatabase extends SQLiteOpenHelper {
     public static List<SensorData> getDay() {
         List<SensorData> sensors = new ArrayList<>();
         Cursor cursor = SensorDatabase.getCursorDay();
+        if (cursor.moveToFirst()) {
+
+            do {
+                SensorData sensorData = new SensorData();
+                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
+                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
+                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
+                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+
+                sensors.add(sensorData);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sensors;
+    }
+
+    public static List<SensorData> getWeek() {
+        List<SensorData> sensors = new ArrayList<>();
+        Cursor cursor = SensorDatabase.getCursorWeek();
+        if (cursor.moveToFirst()) {
+
+            do {
+                SensorData sensorData = new SensorData();
+                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
+                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
+                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
+                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+
+                sensors.add(sensorData);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sensors;
+    }
+
+    public static List<SensorData> getMonth() {
+        List<SensorData> sensors = new ArrayList<>();
+        Cursor cursor = SensorDatabase.getCursorMonth();
         if (cursor.moveToFirst()) {
 
             do {
