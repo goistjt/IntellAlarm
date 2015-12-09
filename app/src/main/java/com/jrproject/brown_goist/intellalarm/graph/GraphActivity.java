@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -20,9 +21,11 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
+import com.jrproject.brown_goist.intellalarm.SensorData;
 import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GraphActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener,
         OnChartValueSelectedListener {
@@ -34,6 +37,9 @@ public class GraphActivity extends BaseActivity implements SeekBar.OnSeekBarChan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SensorDatabase.init(GraphActivity.this);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.graph_activity);
@@ -146,8 +152,10 @@ public class GraphActivity extends BaseActivity implements SeekBar.OnSeekBarChan
         tvY.setText("" + (mSeekBarY.getProgress()));
 
         ArrayList<String> xVals = new ArrayList<>();
-        for (int i = 0; i < mSeekBarX.getProgress(); i++) {
-            xVals.add((i) + "");
+        List<SensorData> sd = SensorDatabase.getDay();
+
+        for (int i = 0; i < sd.size(); i++) {
+            xVals.add(sd.get(i).getTimeStamp().substring(11));
         }
 
         ArrayList<LineDataSet> dataSets = new ArrayList<>();
@@ -156,8 +164,10 @@ public class GraphActivity extends BaseActivity implements SeekBar.OnSeekBarChan
 
             ArrayList<Entry> values = new ArrayList<>();
 
-            for (int i = 0; i < mSeekBarX.getProgress(); i++) {
-                double val = (Math.random() * mSeekBarY.getProgress()) + 3;
+            for (int i = 0; i < sd.size(); i++) {
+                SensorData d = sd.get(i);
+
+                double val = (z == 0 ? d.getxValue() : z == 1 ? d.getyValue() : d.getzValue());
                 values.add(new Entry((float) val, i));
             }
 

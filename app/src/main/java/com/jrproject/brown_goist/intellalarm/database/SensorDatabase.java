@@ -6,18 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.SensorData;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +25,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
     static SensorDatabase instance = null;
     static SQLiteDatabase database = null;
 
-    static final String DATABASE_NAME = "DB";
+    static final String DATABASE_NAME = "DB2";
     static final int DATABASE_VERSION = 1;
 
     public static final String SENSOR_TABLE = "sensor";
@@ -112,7 +104,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         return data;
     }
 
-    public static Cursor getCursor() {
+    public static Cursor getCursorAll() {
         // TODO Auto-generated method stub
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
@@ -123,6 +115,26 @@ public class SensorDatabase extends SQLiteOpenHelper {
         };
         return getDatabase().query(SENSOR_TABLE, columns, null, null, null, null,
                 null);
+    }
+
+    public static Cursor getCursorDay() {
+        // TODO Auto-generated method stub
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        String currDateTime = dateFormat.format(date);
+        date = new Date(System.currentTimeMillis() - 3600 * 24 * 1000);
+        String prevDateTime = dateFormat.format(date);
+        String[] columns = new String[]{
+                COLUMN_SENSOR_ID,
+                COLUMN_SENSOR_X,
+                COLUMN_SENSOR_Y,
+                COLUMN_SENSOR_Z,
+                COLUMN_SENSOR_TIMESTAMP
+        };
+        return getDatabase().query(SENSOR_TABLE, columns,
+                COLUMN_SENSOR_TIMESTAMP + " >= DateTime('" + prevDateTime + "') AND "+
+                        COLUMN_SENSOR_TIMESTAMP + " <= DateTime('" + currDateTime + "')",
+                null, null, null, null);
     }
 
     SensorDatabase(Context context) {
@@ -148,7 +160,28 @@ public class SensorDatabase extends SQLiteOpenHelper {
 
     public static List<SensorData> getAll() {
         List<SensorData> sensors = new ArrayList<>();
-        Cursor cursor = SensorDatabase.getCursor();
+        Cursor cursor = SensorDatabase.getCursorAll();
+        if (cursor.moveToFirst()) {
+
+            do {
+                SensorData sensorData = new SensorData();
+                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
+                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
+                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
+                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setTimeStamp(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+
+                sensors.add(sensorData);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sensors;
+    }
+
+    public static List<SensorData> getDay() {
+        List<SensorData> sensors = new ArrayList<>();
+        Cursor cursor = SensorDatabase.getCursorDay();
         if (cursor.moveToFirst()) {
 
             do {

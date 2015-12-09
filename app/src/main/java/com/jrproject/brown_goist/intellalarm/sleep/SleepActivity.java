@@ -98,6 +98,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        SensorDatabase.init(this);
         SensorData sensorData = new SensorData();
         sensorData.setxValue(event.values[0]);
         sensorData.setyValue(event.values[1]);
