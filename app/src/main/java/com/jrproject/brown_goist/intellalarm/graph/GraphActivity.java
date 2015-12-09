@@ -17,9 +17,11 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.SensorData;
+import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
 
 import java.text.DateFormat;
@@ -143,15 +145,16 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         SensorData prev = null;
         for(SensorData s : sd) {
             long curTime = s.getTimeStamp();
-            try {
-                while(curTime >= prev.getTimeStamp() + 1000) {
+            if (prev != null) {
+                long prevTime = prev.getTimeStamp();
+                while(curTime >= prevTime + 1000) {
                     xVals.add(df.format(new Date(curTime)).substring(11));
-                    curTime+=200;
+                    prevTime+=200;
                 }
-            } catch (NullPointerException npe) {
-//                npe.printStackTrace();
+            } else {
                 xVals.add(df.format(new Date(curTime)).substring(11));
             }
+            prev = s;
         }
 
         ArrayList<LineDataSet> dataSets = new ArrayList<>();
@@ -187,7 +190,20 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.buttonDay:
+                Log.d("GraphActivity", "Day button pressed");
+                updateGraph("day");
+                break;
+            case R.id.buttonWeek:
+                Log.d("GraphActivity", "Week button pressed");
+                updateGraph("week");
+                break;
+            case R.id.buttonMonth:
+                Log.d("GraphActivity", "Month button pressed");
+                updateGraph("month");
+                break;
+        }
     }
 
     @Override
