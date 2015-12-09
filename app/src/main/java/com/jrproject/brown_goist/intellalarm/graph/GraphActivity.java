@@ -33,11 +33,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class GraphActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener,
-        OnChartValueSelectedListener {
+public class GraphActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     private LineChart mChart;
     private Button dayButton, weekButton, monthButton;
+    private int[] mColors = new int[] {
+            ColorTemplate.VORDIPLOM_COLORS[0],
+            ColorTemplate.VORDIPLOM_COLORS[3],
+            ColorTemplate.VORDIPLOM_COLORS[4]
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,68 +187,6 @@ public class GraphActivity extends BaseActivity implements SeekBar.OnSeekBarChan
 
     @Override
     public void onNothingSelected() {
-
-    }
-
-    private int[] mColors = new int[] {
-            ColorTemplate.VORDIPLOM_COLORS[0],
-            ColorTemplate.VORDIPLOM_COLORS[3],
-            ColorTemplate.VORDIPLOM_COLORS[4]
-    };
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        mChart.resetTracking();
-
-        ArrayList<String> xVals = new ArrayList<>();
-        List<SensorData> sd = SensorDatabase.getDay();
-
-        for (int i = 0; i < sd.size(); i++) {
-            long time = sd.get(i).getTimeStamp();
-            Date d = new Date(time);
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss.SSS", Locale.getDefault());
-            df.setTimeZone(TimeZone.getDefault());
-            xVals.add(df.format(d).substring(11));
-        }
-
-        ArrayList<LineDataSet> dataSets = new ArrayList<>();
-
-        for (int z = 0; z < 3; z++) {
-
-            ArrayList<Entry> values = new ArrayList<>();
-
-            for (int i = 0; i < sd.size(); i++) {
-                SensorData d = sd.get(i);
-
-                double val = (z == 0 ? d.getxValue() : z == 1 ? d.getyValue() : d.getzValue());
-                values.add(new Entry((float) val, i));
-            }
-
-            LineDataSet d = new LineDataSet(values, "DataSet " + (z + 1));
-            d.setLineWidth(2.5f);
-
-            int color = mColors[z % mColors.length];
-            d.setColor(color);
-            d.setValueTextColor(Color.WHITE);
-            d.setDrawCircles(false);
-            dataSets.add(d);
-        }
-        dataSets.get(0).setLabel("X Values");
-        dataSets.get(1).setLabel("Y Values");
-        dataSets.get(2).setLabel("Z Values");
-
-        LineData data = new LineData(xVals, dataSets);
-        mChart.setData(data);
-        mChart.invalidate();
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
 
     }
 }
