@@ -3,7 +3,7 @@ package com.jrproject.brown_goist.intellalarm;
 /**
  * Created by goistjt on 11/29/2015.
  */
-public class SensorData {
+public class SensorData implements Comparable<SensorData>{
 
     private int id;
     private float xValue;
@@ -57,5 +57,10 @@ public class SensorData {
 
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    @Override
+    public int compareTo(SensorData another) {
+        return Long.compare(timeStamp, another.getTimeStamp());
     }
 }

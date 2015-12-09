@@ -17,16 +17,15 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.SensorData;
-import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +35,7 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
 
     private LineChart mChart;
     private Button dayButton, weekButton, monthButton;
-    private int[] mColors = new int[] {
+    private int[] mColors = new int[]{
             ColorTemplate.VORDIPLOM_COLORS[0],
             ColorTemplate.VORDIPLOM_COLORS[3],
             ColorTemplate.VORDIPLOM_COLORS[4]
@@ -136,26 +135,30 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         List<SensorData> sd = graphType.equals("day") ? SensorDatabase.getDay() : graphType.equals("week") ?
                 SensorDatabase.getWeek() : SensorDatabase.getMonth();
 
-//        for (int i = 0; i < sd.size(); i++) {
-//            long time = sd.get(i).getTimeStamp();
-//            Date d = new Date(time);
-//            xVals.add(df.format(d).substring(11));
-//        }
-
         SensorData prev = null;
-        for(SensorData s : sd) {
+        for (SensorData s : sd) {
             long curTime = s.getTimeStamp();
             if (prev != null) {
                 long prevTime = prev.getTimeStamp();
-                while(curTime >= prevTime + 1000) {
-                    xVals.add(df.format(new Date(curTime)).substring(11));
-                    prevTime+=200;
+                while (curTime >= prevTime + 400) {
+                    SensorData addSD = new SensorData();
+                    prevTime += 200;
+                    xVals.add(df.format(new Date(prevTime)).substring(11));
+
+                    //Adding in a dummy value for spacing
+                    addSD.setxValue(0);
+                    addSD.setyValue(0);
+                    addSD.setzValue(0);
+                    addSD.setTimeStamp(prevTime);
+                    sd.add(addSD);
                 }
-            } else {
-                xVals.add(df.format(new Date(curTime)).substring(11));
             }
+            xVals.add(df.format(new Date(curTime)).substring(11));
             prev = s;
         }
+
+        //Sorting data chronological after adding dummy values
+        Collections.sort(sd);
 
         ArrayList<LineDataSet> dataSets = new ArrayList<>();
 
