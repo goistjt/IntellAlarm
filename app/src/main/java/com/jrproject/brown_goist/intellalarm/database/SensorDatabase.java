@@ -8,11 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.jrproject.brown_goist.intellalarm.SensorData;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /*
  * usage:
@@ -97,7 +94,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
             data.setxValue(c.getFloat(c.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
             data.setyValue(c.getFloat(c.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
             data.setzValue(c.getFloat(c.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
-            data.setTimeStamp(c.getString(c.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+            data.setTimeStamp(c.getLong(c.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
         }
         c.close();
@@ -119,11 +116,8 @@ public class SensorDatabase extends SQLiteOpenHelper {
 
     public static Cursor getCursorDay() {
         // TODO Auto-generated method stub
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date date = new Date();
-        String currDateTime = dateFormat.format(date);
-        date = new Date(System.currentTimeMillis() - 3600 * 24 * 1000);
-        String prevDateTime = dateFormat.format(date);
+        long currDateTime = System.currentTimeMillis();
+        long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
                 COLUMN_SENSOR_X,
@@ -132,9 +126,8 @@ public class SensorDatabase extends SQLiteOpenHelper {
                 COLUMN_SENSOR_TIMESTAMP
         };
         return getDatabase().query(SENSOR_TABLE, columns,
-                COLUMN_SENSOR_TIMESTAMP + " >= DateTime('" + prevDateTime + "') AND "+
-                        COLUMN_SENSOR_TIMESTAMP + " <= DateTime('" + currDateTime + "')",
-                null, null, null, null);
+                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
+                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
     }
 
     SensorDatabase(Context context) {
@@ -149,7 +142,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
                 + COLUMN_SENSOR_X + " REAL NOT NULL, "
                 + COLUMN_SENSOR_Y + " REAL NOT NULL, "
                 + COLUMN_SENSOR_Z + " REAL NOT NULL, "
-                + COLUMN_SENSOR_TIMESTAMP + " TEXT NOT NULL)");
+                + COLUMN_SENSOR_TIMESTAMP + " INTEGER NOT NULL)");
     }
 
     @Override
@@ -169,7 +162,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
                 sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
                 sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
                 sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
-                sensorData.setTimeStamp(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
 
@@ -190,7 +183,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
                 sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
                 sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
                 sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
-                sensorData.setTimeStamp(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
 

@@ -1,9 +1,5 @@
 package com.jrproject.brown_goist.intellalarm;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Created by goistjt on 11/29/2015.
  */
@@ -13,7 +9,7 @@ public class SensorData {
     private float xValue;
     private float yValue;
     private float zValue;
-    private String timeStamp;
+    private long timeStamp;
 
     public SensorData() {
 
@@ -51,17 +47,15 @@ public class SensorData {
         this.zValue = zValue;
     }
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
     public void setTimeStamp() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date date = new Date();
-        this.timeStamp = dateFormat.format(date);
+        this.timeStamp = System.currentTimeMillis();
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 }
