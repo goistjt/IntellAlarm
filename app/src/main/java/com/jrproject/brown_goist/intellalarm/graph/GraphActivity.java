@@ -34,7 +34,7 @@ import java.util.TimeZone;
 public class GraphActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     private LineChart mChart;
-    private Button dayButton, weekButton, monthButton;
+    private Button dayButton, weekButton, hoursButton;
     private int[] mColors = new int[]{
             ColorTemplate.VORDIPLOM_COLORS[0],
             ColorTemplate.VORDIPLOM_COLORS[3],
@@ -53,14 +53,14 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.graph_activity);
 
+        hoursButton = (Button) findViewById(R.id.button12Hours);
+        hoursButton.setOnClickListener(this);
+
         dayButton = (Button) findViewById(R.id.buttonDay);
         dayButton.setOnClickListener(this);
 
         weekButton = (Button) findViewById(R.id.buttonWeek);
         weekButton.setOnClickListener(this);
-
-        monthButton = (Button) findViewById(R.id.buttonMonth);
-        monthButton.setOnClickListener(this);
 
         mChart = (LineChart) findViewById(R.id.chart1);
         mChart.setOnChartValueSelectedListener(this);
@@ -94,7 +94,7 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         l.setTextColor(Color.WHITE);
         l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
 
-        updateGraph("day");
+        updateGraph("hours");
     }
 
     @Override
@@ -122,7 +122,7 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
     @Override
     protected void onResume() {
         super.onResume();
-        updateGraph("day");
+        updateGraph("hours");
     }
 
     public void updateGraph(String graphType) {
@@ -132,17 +132,36 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
 
         ArrayList<String> xVals = new ArrayList<>();
 
-        List<SensorData> sd = graphType.equals("day") ? SensorDatabase.getDay() : graphType.equals("week") ?
-                SensorDatabase.getWeek() : SensorDatabase.getMonth();
+        List<SensorData> sd = graphType.equals("hours") ? SensorDatabase.get12Hours() : graphType.equals("day") ?
+                SensorDatabase.getDay() : SensorDatabase.getWeek();
+        List<SensorData> fillerData = new ArrayList<>();
 
         SensorData prev = null;
+        long startTime = graphType.equals("hours") ? System.currentTimeMillis() - 3600 * 12 * 1000 :
+                graphType.equals("day") ? System.currentTimeMillis() - 3600 * 24 * 1000 :
+                        System.currentTimeMillis() - 3600 * 24 * 7 * 1000;
+        long endTime = System.currentTimeMillis();
+
+        long curTime = sd.get(0).getTimeStamp();
+        while (startTime <= curTime) {
+            SensorData addSD = new SensorData();
+            startTime += 10000;
+            xVals.add(df.format(new Date(startTime)).substring(11));
+
+            //Adding in a dummy value for spacing
+            addSD.setxValue(0);
+            addSD.setyValue(0);
+            addSD.setzValue(0);
+            addSD.setTimeStamp(startTime);
+            fillerData.add(addSD);
+        }
         for (SensorData s : sd) {
-            long curTime = s.getTimeStamp();
+            curTime = s.getTimeStamp();
             if (prev != null) {
                 long prevTime = prev.getTimeStamp();
-                while (curTime >= prevTime + 400) {
+                while (curTime >= prevTime + 60000) {
                     SensorData addSD = new SensorData();
-                    prevTime += 200;
+                    prevTime += 10000;
                     xVals.add(df.format(new Date(prevTime)).substring(11));
 
                     //Adding in a dummy value for spacing
@@ -150,12 +169,28 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
                     addSD.setyValue(0);
                     addSD.setzValue(0);
                     addSD.setTimeStamp(prevTime);
-                    sd.add(addSD);
+                    fillerData.add(addSD);
                 }
             }
             xVals.add(df.format(new Date(curTime)).substring(11));
             prev = s;
         }
+        long prevTime = prev.getTimeStamp();
+        while (endTime >= prevTime) {
+            SensorData addSD = new SensorData();
+            prevTime += 10000;
+            xVals.add(df.format(new Date(prevTime)).substring(11));
+
+            //Adding in a dummy value for spacing
+            addSD.setxValue(0);
+            addSD.setyValue(0);
+            addSD.setzValue(0);
+            addSD.setTimeStamp(prevTime);
+            fillerData.add(addSD);
+        }
+
+        //Add filler data to list of SensorData
+        sd.addAll(fillerData);
 
         //Sorting data chronological after adding dummy values
         Collections.sort(sd);
@@ -194,6 +229,10 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.button12Hours:
+                Log.d("GraphActivity", "12 Hours button pressed");
+                updateGraph("hours");
+                break;
             case R.id.buttonDay:
                 Log.d("GraphActivity", "Day button pressed");
                 updateGraph("day");
@@ -201,10 +240,6 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
             case R.id.buttonWeek:
                 Log.d("GraphActivity", "Week button pressed");
                 updateGraph("week");
-                break;
-            case R.id.buttonMonth:
-                Log.d("GraphActivity", "Month button pressed");
-                updateGraph("month");
                 break;
         }
     }

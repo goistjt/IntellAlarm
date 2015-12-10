@@ -21,6 +21,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/graph_activity_button_12hours"
+            android:id="@+id/button12Hours" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_day"
             android:id="@+id/buttonDay" />
 
@@ -30,11 +36,6 @@
             android:text="@string/graph_activity_button_week"
             android:id="@+id/buttonWeek" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/graph_activity_button_month"
-            android:id="@+id/buttonMonth" />
     </LinearLayout>
 
 </RelativeLayout>
