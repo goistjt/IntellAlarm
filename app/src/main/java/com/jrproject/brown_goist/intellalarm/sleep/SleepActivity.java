@@ -8,6 +8,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.Menu;
@@ -25,13 +26,13 @@ import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
 
 public class SleepActivity extends Activity implements View.OnLongClickListener, SensorEventListener {
 
-    private Button awakeButton;
-    private TextView alarmTime;
     static Activity parentActivity;
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private PowerManager.WakeLock wakeLock;
 
     public static final int SENSOR_DELAY = 200000; //200ms
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +44,13 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         AlarmDatabase.init(this);
         SensorDatabase.init(this);
 
-        alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
+        TextView alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
         Alarm nextAlarm = AlarmDatabase.getNextAlarm();
         if (nextAlarm != null) {
             alarmTime.setText(nextAlarm.getAlarmTimeString());
         }
 
-        awakeButton = (Button) findViewById(R.id.sleep_activity_awake_button);
+        Button awakeButton = (Button) findViewById(R.id.sleep_activity_awake_button);
         awakeButton.setLongClickable(true);
         awakeButton.setOnLongClickListener(this);
 
@@ -62,6 +63,9 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             Log.d("SleepSensor", "Linear Accelerometer Does Not Exist");
         }
 
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sleep Screen Data Collection");
+        wakeLock.acquire();
     }
 
     @Override
@@ -81,6 +85,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     @Override
     protected void onDestroy() {
         sensorManager.unregisterListener(this);
+        wakeLock.release();
         super.onDestroy();
     }
 
@@ -116,11 +121,13 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     protected void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
+        wakeLock.release();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         sensorManager.registerListener(this, accelerometer, SENSOR_DELAY);
+        wakeLock.acquire();
     }
 }
