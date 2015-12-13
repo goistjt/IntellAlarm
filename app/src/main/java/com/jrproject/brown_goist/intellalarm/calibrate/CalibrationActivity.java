@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
@@ -16,14 +17,17 @@ import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
 public class CalibrationActivity extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
-    private float currentMax = 0;
+    private TextView countdown;
 
+    private float currentMax = 0;
     private int readings = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calibrate_activity);
+
+        countdown = (TextView) findViewById(R.id.calibration_countdown_text_view);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
@@ -44,12 +48,29 @@ public class CalibrationActivity extends Activity implements SensorEventListener
             currentMax = absSize;
         }
         readings++;
-        if(readings == 125) {
-            SharedPreferences settings= getApplicationContext().getSharedPreferences("IntellAlarm", 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("threshold", currentMax);
-            editor.apply();
-            this.finish();
+        switch (readings) {
+            case 25:
+                countdown.setText("Calibration Complete In: 4");
+                break;
+            case 50:
+                countdown.setText("Calibration Complete In: 3");
+                break;
+            case 75:
+                countdown.setText("Calibration Complete In: 2");
+                break;
+            case 100:
+                countdown.setText("Calibration Complete In: 1");
+                break;
+            case 125:
+                countdown.setText("Calibration Complete In: 0");
+                SharedPreferences settings= getApplicationContext().getSharedPreferences("IntellAlarm", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putFloat("threshold", currentMax);
+                editor.apply();
+                this.finish();
+                break;
+            default:
+                break;
         }
     }
 

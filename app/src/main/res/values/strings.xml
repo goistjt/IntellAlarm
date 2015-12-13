@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<color name="holo_blue_light">#ff33b5e5</color>
-	
+
     <string name="app_name">Alarm Clock</string>
     <string name="title_activity_set_alarms">Set Alarm</string>
     <string name="no_alarms">No alarms have been set</string>
-    
+
     <string name="button_new">New</string>
-    
+
     <string name="menu_item_new">New</string>
     <string name="menu_item_save">Save</string>
     <string name="menu_item_delete">Delete</string>
@@ -21,7 +21,7 @@
 
 
     <color name="title_background_color">#000000</color>
-		
+
 	<string name="button_delete">Delete</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
@@ -33,6 +33,6 @@
     <string name="graph_activity_button_day">Day</string>
     <string name="graph_activity_button_week">Week</string>
 
-    <string name="calibration_activity_button_text">Calibrating…</string>
+    <string name="calibration_complete_timer">Calibration Complete In: 5</string>
 
 </resources>
