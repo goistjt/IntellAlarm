@@ -34,7 +34,7 @@ import java.util.TimeZone;
 public class GraphActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     private LineChart mChart;
-    private Button dayButton, weekButton, hours12Button, hourlyButton;
+    private Button dayButton, weekButton, hours12Button;
     private int[] mColors = new int[]{
             ColorTemplate.VORDIPLOM_COLORS[0],
             ColorTemplate.VORDIPLOM_COLORS[3],
@@ -52,9 +52,6 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.graph_activity);
-
-        hourlyButton = (Button) findViewById(R.id.buttonHourly);
-        hourlyButton.setOnClickListener(this);
 
         hours12Button = (Button) findViewById(R.id.button12Hours);
         hours12Button.setOnClickListener(this);
