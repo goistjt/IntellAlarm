@@ -31,4 +31,6 @@
     <string name="graph_activity_button_day">Day</string>
     <string name="graph_activity_button_week">Week</string>
 
+    <string name="calibration_activity_button_text">Calibrating…</string>
+
 </resources>
