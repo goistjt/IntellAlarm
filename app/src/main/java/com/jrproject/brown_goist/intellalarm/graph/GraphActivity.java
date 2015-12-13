@@ -107,6 +107,7 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         menu.findItem(R.id.menu_item_save).setVisible(false);
         menu.findItem(R.id.menu_item_delete).setVisible(false);
         menu.findItem(R.id.menu_item_graph).setVisible(false);
+        menu.findItem(R.id.menu_item_calibrate).setVisible(false);
         return result;
     }
 

@@ -79,6 +79,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         menu.findItem(R.id.menu_item_delete).setVisible(false);
         menu.findItem(R.id.menu_item_graph).setVisible(false);
         menu.findItem(R.id.menu_item_alarm_list).setVisible(false);
+        menu.findItem(R.id.menu_item_calibrate).setVisible(false);
         return super.onCreateOptionsMenu(menu);
     }
 

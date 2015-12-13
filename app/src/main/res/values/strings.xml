@@ -17,8 +17,10 @@
     <string name="menu_item_sleep">Sleep</string>
     <string name="menu_item_graph">Stats</string>
     <string name="menu_item_alarm_list">Alarms</string>
-	
-	<color name="title_background_color">#000000</color>
+    <string name="menu_item_calibrate">Calibrate</string>
+
+
+    <color name="title_background_color">#000000</color>
 		
 	<string name="button_delete">Delete</string>
 	<string name="ok">OK</string>
