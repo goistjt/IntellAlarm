@@ -29,10 +29,11 @@
     <string name="sleep_activity_alarm_time">00:00</string>
     <string name="sleep_activity_awake_button">Awake</string>
 
+    <string name="graph_activity_button_6hours">6 Hours</string>
     <string name="graph_activity_button_12hours">12 Hours</string>
     <string name="graph_activity_button_day">Day</string>
-    <string name="graph_activity_button_week">Week</string>
 
     <string name="calibration_complete_timer">Calibration Complete In: 5</string>
+
 
 </resources>

@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
 import com.jrproject.brown_goist.intellalarm.calibrate.CalibrationActivity;
-import com.jrproject.brown_goist.intellalarm.graph.GraphActivity;
+import com.jrproject.brown_goist.intellalarm.graph.BarChartActivity;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
@@ -55,7 +55,7 @@ public abstract class BaseActivity extends Activity implements android.view.View
                 callSleepActivity();
                 break;
             case R.id.menu_item_graph:
-                Intent graphIntent = new Intent(this, GraphActivity.class);
+                Intent graphIntent = new Intent(this, BarChartActivity.class);
                 startActivity(graphIntent);
                 break;
             case R.id.menu_item_alarm_list:
@@ -83,7 +83,7 @@ public abstract class BaseActivity extends Activity implements android.view.View
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                dialog.dismiss();
             }
         });
         dialog.show();

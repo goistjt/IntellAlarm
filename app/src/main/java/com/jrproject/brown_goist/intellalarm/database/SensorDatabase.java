@@ -94,7 +94,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
     }
 
     public static Cursor getCursorAll() {
-        // TODO Auto-generated method stub
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
                 COLUMN_EVENTS,
@@ -105,7 +104,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
     }
 
     public static Cursor getCursorHourly(int start, int end) {
-        // TODO Auto-generated method stub
         long currDateTime = System.currentTimeMillis() - 3600 * end * 1000;
         long prevDateTime = System.currentTimeMillis() - 3600 * start * 1000;
         String[] columns = new String[]{
@@ -118,8 +116,20 @@ public class SensorDatabase extends SQLiteOpenHelper {
                         COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
     }
 
+    public static Cursor getCursor6Hours() {
+        long currDateTime = System.currentTimeMillis();
+        long prevDateTime = System.currentTimeMillis() - 3600 * 6 * 1000;
+        String[] columns = new String[]{
+                COLUMN_SENSOR_ID,
+                COLUMN_EVENTS,
+                COLUMN_SENSOR_TIMESTAMP
+        };
+        return getDatabase().query(SENSOR_TABLE, columns,
+                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
+                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
+    }
+
     public static Cursor getCursor12Hours() {
-        // TODO Auto-generated method stub
         long currDateTime = System.currentTimeMillis();
         long prevDateTime = System.currentTimeMillis() - 3600 * 12 * 1000;
         String[] columns = new String[]{
@@ -133,23 +143,8 @@ public class SensorDatabase extends SQLiteOpenHelper {
     }
 
     public static Cursor getCursorDay() {
-        // TODO Auto-generated method stub
         long currDateTime = System.currentTimeMillis();
         long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 1000;
-        String[] columns = new String[]{
-                COLUMN_SENSOR_ID,
-                COLUMN_EVENTS,
-                COLUMN_SENSOR_TIMESTAMP
-        };
-        return getDatabase().query(SENSOR_TABLE, columns,
-                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
-                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
-    }
-
-    public static Cursor getCursorWeek() {
-        // TODO Auto-generated method stub
-        long currDateTime = System.currentTimeMillis();
-        long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 7 * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
                 COLUMN_EVENTS,
@@ -166,7 +161,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
         db.execSQL("CREATE TABLE IF NOT EXISTS " + SENSOR_TABLE + " ( "
                 + COLUMN_SENSOR_ID + " INTEGER primary key autoincrement, "
                 + COLUMN_EVENTS + " INTEGER NOT NULL, "
@@ -217,6 +211,25 @@ public class SensorDatabase extends SQLiteOpenHelper {
         return sensors;
     }
 
+    public static List<SensorData> get6Hours() {
+        List<SensorData> sensors = new ArrayList<>();
+        Cursor cursor = SensorDatabase.getCursor6Hours();
+        if (cursor.moveToFirst()) {
+
+            do {
+                SensorData sensorData = new SensorData();
+                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
+                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
+                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+
+                sensors.add(sensorData);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sensors;
+    }
+
     public static List<SensorData> get12Hours() {
         List<SensorData> sensors = new ArrayList<>();
         Cursor cursor = SensorDatabase.getCursor12Hours();
@@ -239,25 +252,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
     public static List<SensorData> getDay() {
         List<SensorData> sensors = new ArrayList<>();
         Cursor cursor = SensorDatabase.getCursorDay();
-        if (cursor.moveToFirst()) {
-
-            do {
-                SensorData sensorData = new SensorData();
-                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
-                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
-
-                sensors.add(sensorData);
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return sensors;
-    }
-
-    public static List<SensorData> getWeek() {
-        List<SensorData> sensors = new ArrayList<>();
-        Cursor cursor = SensorDatabase.getCursorWeek();
         if (cursor.moveToFirst()) {
 
             do {
