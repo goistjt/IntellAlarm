@@ -64,8 +64,6 @@ public abstract class BaseActivity extends Activity implements android.view.View
                 break;
             case R.id.menu_item_calibrate:
                 callCalibrateActivity();
-                Intent calibrateIntent = new Intent(this, CalibrationActivity.class);
-                startActivity(calibrateIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
