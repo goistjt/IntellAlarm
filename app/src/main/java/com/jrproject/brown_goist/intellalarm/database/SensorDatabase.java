@@ -27,9 +27,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
 
     public static final String SENSOR_TABLE = "sensor";
     public static final String COLUMN_SENSOR_ID = "_id";
-    public static final String COLUMN_SENSOR_X = "sensor_x";
-    public static final String COLUMN_SENSOR_Y = "sensor_y";
-    public static final String COLUMN_SENSOR_Z = "sensor_z";
+    public static final String COLUMN_EVENTS = "events";
     public static final String COLUMN_SENSOR_TIMESTAMP = "sensor_timestamp";
 
     public static void init(Context context) {
@@ -55,9 +53,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
 
     public static long create(SensorData data) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_SENSOR_X, data.getxValue());
-        cv.put(COLUMN_SENSOR_Y, data.getyValue());
-        cv.put(COLUMN_SENSOR_Z, data.getzValue());
+        cv.put(COLUMN_EVENTS, data.getNumEvents());
         cv.put(COLUMN_SENSOR_TIMESTAMP, data.getTimeStamp());
 
         return getDatabase().insert(SENSOR_TABLE, null, cv);
@@ -79,9 +75,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
-                COLUMN_SENSOR_X,
-                COLUMN_SENSOR_Y,
-                COLUMN_SENSOR_Z,
+                COLUMN_EVENTS,
                 COLUMN_SENSOR_TIMESTAMP
         };
         Cursor c = getDatabase().query(SENSOR_TABLE, columns, COLUMN_SENSOR_ID + "=" + id, null, null, null,
@@ -91,9 +85,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             data = new SensorData();
             data.setId(c.getInt(c.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-            data.setxValue(c.getFloat(c.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
-            data.setyValue(c.getFloat(c.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
-            data.setzValue(c.getFloat(c.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+            data.setNumEvents(c.getInt(c.getColumnIndexOrThrow(COLUMN_EVENTS)));
             data.setTimeStamp(c.getLong(c.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
         }
@@ -105,9 +97,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
-                COLUMN_SENSOR_X,
-                COLUMN_SENSOR_Y,
-                COLUMN_SENSOR_Z,
+                COLUMN_EVENTS,
                 COLUMN_SENSOR_TIMESTAMP
         };
         return getDatabase().query(SENSOR_TABLE, columns, null, null, null, null,
@@ -120,9 +110,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         long prevDateTime = System.currentTimeMillis() - 3600 * start * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
-                COLUMN_SENSOR_X,
-                COLUMN_SENSOR_Y,
-                COLUMN_SENSOR_Z,
+                COLUMN_EVENTS,
                 COLUMN_SENSOR_TIMESTAMP
         };
         return getDatabase().query(SENSOR_TABLE, columns,
@@ -136,9 +124,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         long prevDateTime = System.currentTimeMillis() - 3600 * 12 * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
-                COLUMN_SENSOR_X,
-                COLUMN_SENSOR_Y,
-                COLUMN_SENSOR_Z,
+                COLUMN_EVENTS,
                 COLUMN_SENSOR_TIMESTAMP
         };
         return getDatabase().query(SENSOR_TABLE, columns,
@@ -152,9 +138,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
-                COLUMN_SENSOR_X,
-                COLUMN_SENSOR_Y,
-                COLUMN_SENSOR_Z,
+                COLUMN_EVENTS,
                 COLUMN_SENSOR_TIMESTAMP
         };
         return getDatabase().query(SENSOR_TABLE, columns,
@@ -168,9 +152,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         long prevDateTime = System.currentTimeMillis() - 3600 * 24 * 7 * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
-                COLUMN_SENSOR_X,
-                COLUMN_SENSOR_Y,
-                COLUMN_SENSOR_Z,
+                COLUMN_EVENTS,
                 COLUMN_SENSOR_TIMESTAMP
         };
         return getDatabase().query(SENSOR_TABLE, columns,
@@ -187,9 +169,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL("CREATE TABLE IF NOT EXISTS " + SENSOR_TABLE + " ( "
                 + COLUMN_SENSOR_ID + " INTEGER primary key autoincrement, "
-                + COLUMN_SENSOR_X + " REAL NOT NULL, "
-                + COLUMN_SENSOR_Y + " REAL NOT NULL, "
-                + COLUMN_SENSOR_Z + " REAL NOT NULL, "
+                + COLUMN_EVENTS + " INTEGER NOT NULL, "
                 + COLUMN_SENSOR_TIMESTAMP + " INTEGER NOT NULL)");
     }
 
@@ -207,9 +187,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
             do {
                 SensorData sensorData = new SensorData();
                 sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
-                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
-                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
                 sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
@@ -228,9 +206,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
             do {
                 SensorData sensorData = new SensorData();
                 sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
-                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
-                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
                 sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
@@ -249,9 +225,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
             do {
                 SensorData sensorData = new SensorData();
                 sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
-                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
-                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
                 sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
@@ -270,9 +244,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
             do {
                 SensorData sensorData = new SensorData();
                 sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
-                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
-                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
                 sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
@@ -291,9 +263,7 @@ public class SensorDatabase extends SQLiteOpenHelper {
             do {
                 SensorData sensorData = new SensorData();
                 sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
-                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
-                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
                 sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
 
                 sensors.add(sensorData);
