@@ -145,7 +145,6 @@ public class AlarmActivity extends BaseActivity {
                 Toast.makeText(AlarmActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
 }

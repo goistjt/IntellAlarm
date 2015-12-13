@@ -63,11 +63,32 @@ public abstract class BaseActivity extends Activity implements android.view.View
                 startActivity(alarmListIntent);
                 break;
             case R.id.menu_item_calibrate:
+                callCalibrateActivity();
                 Intent calibrateIntent = new Intent(this, CalibrationActivity.class);
                 startActivity(calibrateIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void callCalibrateActivity() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(BaseActivity.this);
+        dialog.setTitle("Sensor Calibration");
+        dialog.setMessage("Please set phone face up on a flat surface before pressing 'Ok'");
+        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent startCalibrationIntent = new Intent(BaseActivity.this, CalibrationActivity.class);
+                startActivity(startCalibrationIntent);
+            }
+        });
+        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        dialog.show();
     }
 
     protected void callAlarmScheduleService() {
