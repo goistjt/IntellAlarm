@@ -34,7 +34,7 @@ import java.util.TimeZone;
 public class GraphActivity extends BaseActivity implements OnChartValueSelectedListener {
 
     private LineChart mChart;
-    private Button dayButton, weekButton, hoursButton;
+    private Button dayButton, weekButton, hours12Button, hourlyButton;
     private int[] mColors = new int[]{
             ColorTemplate.VORDIPLOM_COLORS[0],
             ColorTemplate.VORDIPLOM_COLORS[3],
@@ -53,8 +53,11 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.graph_activity);
 
-        hoursButton = (Button) findViewById(R.id.button12Hours);
-        hoursButton.setOnClickListener(this);
+        hourlyButton = (Button) findViewById(R.id.buttonHourly);
+        hourlyButton.setOnClickListener(this);
+
+        hours12Button = (Button) findViewById(R.id.button12Hours);
+        hours12Button.setOnClickListener(this);
 
         dayButton = (Button) findViewById(R.id.buttonDay);
         dayButton.setOnClickListener(this);
@@ -94,7 +97,7 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         l.setTextColor(Color.WHITE);
         l.setPosition(Legend.LegendPosition.RIGHT_OF_CHART);
 
-        updateGraph("hours");
+        updateGraph("hourly", 5, 4);
     }
 
     @Override
@@ -122,25 +125,32 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
     @Override
     protected void onResume() {
         super.onResume();
-        updateGraph("hours");
+        updateGraph("hourly", 1, 0);
     }
 
-    public void updateGraph(String graphType) {
+    public void updateGraph(String graphType, int start, int end) {
         df.setTimeZone(TimeZone.getDefault());
         SensorDatabase.init(GraphActivity.this);
         mChart.resetTracking();
 
         ArrayList<String> xVals = new ArrayList<>();
 
-        List<SensorData> sd = graphType.equals("hours") ? SensorDatabase.get12Hours() : graphType.equals("day") ?
+        List<SensorData> sd = graphType.equals("hourly") ? SensorDatabase.getHourly(start, end) :
+                graphType.equals("12hours") ? SensorDatabase.get12Hours() : graphType.equals("day") ?
                 SensorDatabase.getDay() : SensorDatabase.getWeek();
+        if (sd.size() == 0) {
+            return;
+        }
+
         List<SensorData> fillerData = new ArrayList<>();
 
         SensorData prev = null;
-        long startTime = graphType.equals("hours") ? System.currentTimeMillis() - 3600 * 12 * 1000 :
+        long startTime = graphType.equals("hourly") ? System.currentTimeMillis() - 3600 * start * 1000 :
+                graphType.equals("12hours") ? System.currentTimeMillis() - 3600 * 12 * 1000 :
                 graphType.equals("day") ? System.currentTimeMillis() - 3600 * 24 * 1000 :
                         System.currentTimeMillis() - 3600 * 24 * 7 * 1000;
-        long endTime = System.currentTimeMillis();
+        long endTime = graphType.equals("hourly") ? System.currentTimeMillis() - 3600 * end * 1000 :
+                System.currentTimeMillis();
 
         long curTime = sd.get(0).getTimeStamp();
         while (startTime <= curTime) {
@@ -231,15 +241,15 @@ public class GraphActivity extends BaseActivity implements OnChartValueSelectedL
         switch (v.getId()) {
             case R.id.button12Hours:
                 Log.d("GraphActivity", "12 Hours button pressed");
-                updateGraph("hours");
+                updateGraph("12hours", 0, 0);
                 break;
             case R.id.buttonDay:
                 Log.d("GraphActivity", "Day button pressed");
-                updateGraph("day");
+                updateGraph("day", 0, 0);
                 break;
             case R.id.buttonWeek:
                 Log.d("GraphActivity", "Week button pressed");
-                updateGraph("week");
+                updateGraph("week", 0, 0);
                 break;
         }
     }

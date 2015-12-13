@@ -114,6 +114,22 @@ public class SensorDatabase extends SQLiteOpenHelper {
                 null);
     }
 
+    public static Cursor getCursorHourly(int start, int end) {
+        // TODO Auto-generated method stub
+        long currDateTime = System.currentTimeMillis() - 3600 * end * 1000;
+        long prevDateTime = System.currentTimeMillis() - 3600 * start * 1000;
+        String[] columns = new String[]{
+                COLUMN_SENSOR_ID,
+                COLUMN_SENSOR_X,
+                COLUMN_SENSOR_Y,
+                COLUMN_SENSOR_Z,
+                COLUMN_SENSOR_TIMESTAMP
+        };
+        return getDatabase().query(SENSOR_TABLE, columns,
+                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
+                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
+    }
+
     public static Cursor getCursor12Hours() {
         // TODO Auto-generated method stub
         long currDateTime = System.currentTimeMillis();
@@ -186,6 +202,27 @@ public class SensorDatabase extends SQLiteOpenHelper {
     public static List<SensorData> getAll() {
         List<SensorData> sensors = new ArrayList<>();
         Cursor cursor = SensorDatabase.getCursorAll();
+        if (cursor.moveToFirst()) {
+
+            do {
+                SensorData sensorData = new SensorData();
+                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
+                sensorData.setxValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_X)));
+                sensorData.setyValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Y)));
+                sensorData.setzValue(cursor.getFloat(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_Z)));
+                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
+
+                sensors.add(sensorData);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return sensors;
+    }
+
+    public static List<SensorData> getHourly(int start, int end) {
+        List<SensorData> sensors = new ArrayList<>();
+        Cursor cursor = SensorDatabase.getCursorHourly(start, end);
         if (cursor.moveToFirst()) {
 
             do {
