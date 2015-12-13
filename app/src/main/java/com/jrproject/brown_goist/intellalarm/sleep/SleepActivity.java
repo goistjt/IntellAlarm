@@ -39,7 +39,6 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     private int vals = 0;
     private int events = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +133,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 
     @Override
