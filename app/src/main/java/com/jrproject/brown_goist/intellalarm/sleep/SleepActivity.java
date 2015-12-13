@@ -31,7 +31,13 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     private Sensor accelerometer;
     private PowerManager.WakeLock wakeLock;
 
-    public static final int SENSOR_DELAY = 200000; //200ms
+    private float threshold;
+    public static final int SENSOR_DELAY = 40000; //40ms = 25/second
+
+    private float prev = 0;
+    private static final int VALS_PER_MIN = 25 * 60;
+    private int vals = 0;
+    private int events = 0;
 
 
     @Override
@@ -66,6 +72,9 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sleep Screen Data Collection");
         wakeLock.acquire();
+
+        threshold = getApplicationContext().getSharedPreferences("IntellAlarm", 0).getFloat("threshold", .01F);
+        Log.v("Sensor Threshold", "" + threshold);
     }
 
     @Override
@@ -104,18 +113,27 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        SensorDatabase.init(this);
         SensorData sensorData = new SensorData();
-        sensorData.setxValue(event.values[0]);
-        sensorData.setyValue(event.values[1]);
-        sensorData.setzValue(event.values[2]);
-        sensorData.setTimeStamp();
-        SensorDatabase.create(sensorData);
+        float absSize = (float) Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] +
+                event.values[2] * event.values[2]);
+        absSize = absSize > threshold ? absSize : 0;
+        float deriv = absSize - prev;
+        if (deriv != 0) {
+            events++;
+        }
+        vals++;
+        if (vals >= VALS_PER_MIN) {
+            sensorData.setNumEvents(events);
+            sensorData.setTimeStamp();
+            SensorDatabase.create(sensorData);
+            vals = 0;
+            events = 0;
+        }
+        prev = absSize;
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
 
     @Override
