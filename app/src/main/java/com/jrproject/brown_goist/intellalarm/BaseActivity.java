@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 
+import com.jrproject.brown_goist.intellalarm.calibrate.CalibrationActivity;
 import com.jrproject.brown_goist.intellalarm.graph.GraphActivity;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivity;
 import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
@@ -60,6 +61,10 @@ public abstract class BaseActivity extends Activity implements android.view.View
             case R.id.menu_item_alarm_list:
                 Intent alarmListIntent = new Intent(this, AlarmActivity.class);
                 startActivity(alarmListIntent);
+                break;
+            case R.id.menu_item_calibrate:
+                Intent calibrateIntent = new Intent(this, CalibrationActivity.class);
+                startActivity(calibrateIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
