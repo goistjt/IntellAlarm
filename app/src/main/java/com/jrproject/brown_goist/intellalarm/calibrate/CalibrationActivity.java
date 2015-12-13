@@ -52,6 +52,7 @@ public class CalibrationActivity extends Activity implements SensorEventListener
             SharedPreferences settings= getApplicationContext().getSharedPreferences("IntellAlarm", 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putFloat("threshold", currentMax);
+            editor.apply();
             this.finish();
         }
     }
