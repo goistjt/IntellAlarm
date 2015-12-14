@@ -29,11 +29,19 @@
     <string name="sleep_activity_alarm_time">00:00</string>
     <string name="sleep_activity_awake_button">Awake</string>
 
-    <string name="graph_activity_button_6hours">6 Hours</string>
+    <string name="graph_activity_button_8hours">8 Hours</string>
     <string name="graph_activity_button_12hours">12 Hours</string>
     <string name="graph_activity_button_day">Day</string>
 
     <string name="calibration_complete_timer">Calibration Complete In: 5</string>
+
+    <string name="barchart_time_slept_text">Total Time Slept</string>
+    <string name="barchart_time_format">0 hrs 0 min</string>
+    <string name="barchart_time_awake_text">Total Time Awake</string>
+    <string name="barchart_time_restless_text">Total Time Restless</string>
+    <string name="barchart_sleep_cycles_text">Total Sleep Cycles</string>
+    <string name="barchart_sleep_cycles_format">0</string>
+    <string name="barchart_table_header_text">Times For Past 8 Hours</string>
 
 
 </resources>

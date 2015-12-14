@@ -4,11 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -17,10 +16,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.DataSet;
-import com.github.mikephil.charting.data.filter.Approximator;
-import com.github.mikephil.charting.data.filter.Approximator.ApproximatorType;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.SensorData;
@@ -38,9 +33,11 @@ import java.util.TimeZone;
 public class BarChartActivity extends BaseActivity {
 
     private BarChart mChart;
-    private Button dayButton, hours6Button, hours12Button;
+    private TextView sleepText, awakeText, restlessText, cyclesText, tableHeaderText;
+    private int minAsleep, minAwake, mintRestless, cycles = 0;
+    private int[] colors = {Color.rgb(250, 140, 140), Color.rgb(242, 238, 109), Color.rgb(0, 188, 212)};
 
-    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+    private DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
 
     @Override
@@ -53,14 +50,20 @@ public class BarChartActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.barchart_activity);
 
-        hours6Button = (Button) findViewById(R.id.button6Hours);
-        hours6Button.setOnClickListener(this);
+        Button hours8Button = (Button) findViewById(R.id.button8Hours);
+        hours8Button.setOnClickListener(this);
 
-        hours12Button = (Button) findViewById(R.id.button12Hours);
+        Button hours12Button = (Button) findViewById(R.id.button12Hours);
         hours12Button.setOnClickListener(this);
 
-        dayButton = (Button) findViewById(R.id.buttonDay);
+        Button dayButton = (Button) findViewById(R.id.buttonDay);
         dayButton.setOnClickListener(this);
+
+        tableHeaderText = (TextView) findViewById(R.id.tableHeaderText);
+        sleepText = (TextView) findViewById(R.id.timeSleptEditText);
+        awakeText = (TextView) findViewById(R.id.timeAwakeEditText);
+        restlessText = (TextView) findViewById(R.id.timeRestlessEditText);
+        cyclesText = (TextView) findViewById(R.id.sleepCyclesEditText);
 
         mChart = (BarChart) findViewById(R.id.chart1);
 
@@ -78,14 +81,15 @@ public class BarChartActivity extends BaseActivity {
 
         XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxisPosition.BOTTOM);
-        xAxis.setSpaceBetweenLabels(0);
-        xAxis.setTextColor(Color.WHITE);
+        xAxis.setSpaceBetweenLabels(1);
+        xAxis.setTextColor(Color.rgb(255, 176, 30));
         xAxis.setDrawGridLines(false);
 
         mChart.getAxisLeft().setDrawGridLines(false);
 
         YAxis yAxis = mChart.getAxisLeft();
-        yAxis.setTextColor(Color.WHITE);
+        yAxis.setTextColor(Color.rgb(255, 176, 30));
+        yAxis.setAxisMinValue(0);
         mChart.getAxisRight().setEnabled(false);
 
         // add a nice and smooth animation
@@ -100,7 +104,7 @@ public class BarChartActivity extends BaseActivity {
         // l.setXEntrySpace(6f);
 
         // mChart.setDrawLegend(false);
-        updateGraph("hourly", 1, 0);
+        updateGraph("8hours");
     }
 
     @Override
@@ -114,7 +118,7 @@ public class BarChartActivity extends BaseActivity {
         return result;
     }
 
-    public void updateGraph(String graphType, int start, int end) {
+    public void updateGraph(String graphType) {
         df.setTimeZone(TimeZone.getDefault());
         SensorDatabase.init(BarChartActivity.this);
         mChart.resetTracking();
@@ -122,78 +126,86 @@ public class BarChartActivity extends BaseActivity {
         ArrayList<String> xVals = new ArrayList<>();
         ArrayList<BarEntry> yVals = new ArrayList<>();
 
-        List<SensorData> sd = graphType.equals("hourly") ? SensorDatabase.getHourly(start, end) :
-                graphType.equals("6hours") ? SensorDatabase.get6Hours() : graphType.equals("12Hours") ?
-                        SensorDatabase.get12Hours() : SensorDatabase.getDay();
-        if (sd.size() == 0) {
-            return;
-        }
+        List<SensorData> sd = graphType.equals("8hours") ? SensorDatabase.get8Hours() :
+                graphType.equals("12hours") ? SensorDatabase.get12Hours() : SensorDatabase.getDay();
 
-        SensorData prev = null;
-        long startTime = graphType.equals("hourly") ? System.currentTimeMillis() - 3600 * start * 1000 :
-                graphType.equals("6hours") ? System.currentTimeMillis() - 3600 * 6 * 1000 :
-                        graphType.equals("12hours") ? System.currentTimeMillis() - 3600 * 12 * 1000 :
-                                System.currentTimeMillis() - 3600 * 24 * 1000;
-        long endTime = graphType.equals("hourly") ? System.currentTimeMillis() - 3600 * end * 1000 :
-                System.currentTimeMillis();
+        if (sd.size() != 0) {
 
-        List<SensorData> fillerData = new ArrayList<>();
+            SensorData prev = null;
+            long startTime = graphType.equals("8hours") ? System.currentTimeMillis() - 3600 * 8 * 1000 :
+                    graphType.equals("12hours") ? System.currentTimeMillis() - 3600 * 12 * 1000 :
+                            System.currentTimeMillis() - 3600 * 24 * 1000;
+            long endTime = System.currentTimeMillis();
 
-        long curTime = sd.get(0).getTimeStamp();
-        while (startTime <= curTime) {
-            SensorData addSD = new SensorData();
-            xVals.add(df.format(new Date(startTime)).substring(11));
+            List<SensorData> fillerData = new ArrayList<>();
 
-            //Adding in a dummy value for spacing
-            addSD.setNumEvents(0);
-            addSD.setTimeStamp(startTime);
-            fillerData.add(addSD);
-            startTime += 60000;
-        }
-        for (SensorData s : sd) {
-            curTime = s.getTimeStamp();
-            if (prev != null) {
-                long prevTime = prev.getTimeStamp();
-                while (curTime >= prevTime + 70000) {
-                    SensorData addSD = new SensorData();
-                    xVals.add(df.format(new Date(prevTime)).substring(11));
+            long curTime = sd.get(0).getTimeStamp();
+            while (startTime <= curTime) {
+                SensorData addSD = new SensorData();
+                xVals.add(df.format(new Date(startTime)));
 
-                    //Adding in a dummy value for spacing
-                    addSD.setNumEvents(0);
-                    addSD.setTimeStamp(prevTime);
-                    fillerData.add(addSD);
-                    prevTime += 60000;
-                }
+                //Adding in a dummy value for spacing
+                addSD.setNumEvents(-1);
+                addSD.setTimeStamp(startTime);
+                fillerData.add(addSD);
+                startTime += 60000;
             }
-            xVals.add(df.format(new Date(curTime)).substring(11));
-            prev = s;
+            for (SensorData s : sd) {
+                curTime = s.getTimeStamp();
+                if (prev != null) {
+                    long prevTime = prev.getTimeStamp();
+                    while (curTime >= prevTime + 70000) {
+                        SensorData addSD = new SensorData();
+                        xVals.add(df.format(new Date(prevTime)));
+
+                        //Adding in a dummy value for spacing
+                        addSD.setNumEvents(-1);
+                        addSD.setTimeStamp(prevTime);
+                        fillerData.add(addSD);
+                        prevTime += 60000;
+                    }
+                }
+                xVals.add(df.format(new Date(curTime)));
+                prev = s;
+            }
+            long prevTime = prev.getTimeStamp();
+            while (endTime >= prevTime) {
+                SensorData addSD = new SensorData();
+                xVals.add(df.format(new Date(prevTime)));
+
+                //Adding in a dummy value for spacing
+                addSD.setNumEvents(-1);
+                addSD.setTimeStamp(prevTime);
+                fillerData.add(addSD);
+                prevTime += 60000;
+            }
+
+            //Add filler data to list of SensorData
+            sd.addAll(fillerData);
+
+            //Sorting data chronological after adding dummy values
+            Collections.sort(sd);
         }
-        long prevTime = prev.getTimeStamp();
-        while (endTime >= prevTime) {
-            SensorData addSD = new SensorData();
-            xVals.add(df.format(new Date(prevTime)).substring(11));
-
-            //Adding in a dummy value for spacing
-            addSD.setNumEvents(0);
-            addSD.setTimeStamp(prevTime);
-            fillerData.add(addSD);
-            prevTime += 60000;
-        }
-
-        //Add filler data to list of SensorData
-        sd.addAll(fillerData);
-
-        //Sorting data chronological after adding dummy values
-        Collections.sort(sd);
 
         for (int i = 0; i < sd.size(); i++) {
             SensorData d = sd.get(i);
-            yVals.add(new BarEntry(d.getNumEvents(), i));
+            BarEntry b = new BarEntry(d.getNumEvents(), i);
+
+            if (d.getNumEvents() >= 200) {
+                minAwake++;
+            }
+            if (d.getNumEvents() >= 50 && d.getNumEvents() < 200) {
+                mintRestless++;
+            }
+            if (d.getNumEvents() >= 0 && d.getNumEvents() < 50) {
+                minAsleep++;
+            }
+            yVals.add(b);
         }
 
-        BarDataSet set1 = new BarDataSet(yVals, "Data Set");
-        set1.setColor(Color.rgb(192, 255, 140));
-        set1.setValueTextColor(Color.WHITE);
+        MyBarDataSet set1 = new MyBarDataSet(yVals, "Data Set");
+        //set1.setColor(Color.rgb(0, 188, 212));
+        set1.setColors(colors);
         set1.setDrawValues(false);
 
         ArrayList<BarDataSet> dataSets = new ArrayList<>();
@@ -203,6 +215,27 @@ public class BarChartActivity extends BaseActivity {
 
         mChart.setData(data);
         mChart.invalidate();
+
+        setTableValues(graphType);
+    }
+
+    private void setTableValues(String type) {
+        int hours = minAsleep / 60;
+        int min = minAsleep % 60;
+        String s = hours + " hrs " + min + " min";
+        sleepText.setText(s);
+
+        s = minAwake + " min";
+        awakeText.setText(s);
+
+        s = mintRestless + " min";
+        restlessText.setText(s);
+
+        minAsleep = minAwake = mintRestless = 0;
+
+        hours = type.equals("8hours") ? 8 : type.equals("12hours") ? 12 : 24;
+        s = "Times For Past " + hours + " hours";
+        tableHeaderText.setText(s);
     }
 
     @Override
@@ -220,23 +253,23 @@ public class BarChartActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        updateGraph("hourly", 1, 0);
+        updateGraph("8hours");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button6Hours:
-                Log.d("BarChartActivity", "6 Hours button pressed");
-                updateGraph("6hours", 0, 0);
+            case R.id.button8Hours:
+                Log.d("BarChartActivity", "8 Hours button pressed");
+                updateGraph("8hours");
                 break;
             case R.id.button12Hours:
                 Log.d("BarChartActivity", "12 Hours button pressed");
-                updateGraph("12hours", 0, 0);
+                updateGraph("12hours");
                 break;
             case R.id.buttonDay:
                 Log.d("BarChartActivity", "Day button pressed");
-                updateGraph("day", 0, 0);
+                updateGraph("day");
                 break;
         }
     }

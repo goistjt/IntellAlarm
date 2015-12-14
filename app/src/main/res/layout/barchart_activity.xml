@@ -1,42 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chart1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="250dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_above="@+id/linearLayout" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
-        android:id="@+id/linearLayout">
+        android:orientation="horizontal"
+        android:layout_above="@+id/tableHeaderText"
+        android:layout_alignParentStart="true">
 
         <Button
+            android:id="@+id/button8Hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/graph_activity_button_6hours"
-            android:id="@+id/button6Hours" />
+            android:text="@string/graph_activity_button_8hours"
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="#FFB01E" />
 
         <Button
+            android:id="@+id/button12Hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_12hours"
-            android:id="@+id/button12Hours" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="#FFB01E" />
 
         <Button
+            android:id="@+id/buttonDay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_day"
-            android:id="@+id/buttonDay" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:textColor="#FFB01E" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tableHeaderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/barchart_table_header_text"
+        android:textSize="20sp"
+        android:textColor="#00BCD4"
+        android:layout_gravity="center_horizontal"
+        android:layout_above="@+id/tableLayout"
+        android:paddingTop="10dp"
+        android:layout_centerHorizontal="true" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:showDividers="middle"
+        android:stretchColumns="*"
+        android:paddingRight="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/tableLayout"
+        android:paddingLeft="20dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="5dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/timeSleptText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_time_slept_text"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+
+            <TextView
+                android:id="@+id/timeSleptEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_time_format"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/timeAwakeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_time_awake_text"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+
+            <TextView
+                android:id="@+id/timeAwakeEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_time_format"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/timeRestlessText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_time_restless_text"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+
+            <TextView
+                android:id="@+id/timeRestlessEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_time_format"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/sleepCyclesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_sleep_cycles_text"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+
+            <TextView
+                android:id="@+id/sleepCyclesEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/barchart_sleep_cycles_format"
+                android:textSize="20sp"
+                android:textColor="#00BCD4" />
+        </TableRow>
+    </TableLayout>
 
 
 </RelativeLayout>

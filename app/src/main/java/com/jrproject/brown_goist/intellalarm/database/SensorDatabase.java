@@ -116,9 +116,9 @@ public class SensorDatabase extends SQLiteOpenHelper {
                         COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
     }
 
-    public static Cursor getCursor6Hours() {
+    public static Cursor getCursor8Hours() {
         long currDateTime = System.currentTimeMillis();
-        long prevDateTime = System.currentTimeMillis() - 3600 * 6 * 1000;
+        long prevDateTime = System.currentTimeMillis() - 3600 * 8 * 1000;
         String[] columns = new String[]{
                 COLUMN_SENSOR_ID,
                 COLUMN_EVENTS,
@@ -211,9 +211,9 @@ public class SensorDatabase extends SQLiteOpenHelper {
         return sensors;
     }
 
-    public static List<SensorData> get6Hours() {
+    public static List<SensorData> get8Hours() {
         List<SensorData> sensors = new ArrayList<>();
-        Cursor cursor = SensorDatabase.getCursor6Hours();
+        Cursor cursor = SensorDatabase.getCursor8Hours();
         if (cursor.moveToFirst()) {
 
             do {
