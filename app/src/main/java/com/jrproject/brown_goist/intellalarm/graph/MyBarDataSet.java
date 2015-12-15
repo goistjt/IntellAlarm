@@ -12,10 +12,10 @@ public class MyBarDataSet extends BarDataSet {
 
     @Override
     public int getColor(int index) {
-        if (getEntryForXIndex(index).getVal() >= 200) {
+        if (getEntryForXIndex(index).getVal() >= 150) {
             return mColors.get(0);
         }
-        else if (getEntryForXIndex(index).getVal() < 200 && getEntryForXIndex(index).getVal() >= 50) {
+        else if (getEntryForXIndex(index).getVal() < 150 && getEntryForXIndex(index).getVal() >= 50) {
             return mColors.get(1);
         }
         else {

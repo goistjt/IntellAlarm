@@ -191,10 +191,10 @@ public class BarChartActivity extends BaseActivity {
             SensorData d = sd.get(i);
             BarEntry b = new BarEntry(d.getNumEvents(), i);
 
-            if (d.getNumEvents() >= 200) {
+            if (d.getNumEvents() >= 150) {
                 minAwake++;
             }
-            if (d.getNumEvents() >= 50 && d.getNumEvents() < 200) {
+            if (d.getNumEvents() >= 50 && d.getNumEvents() < 150) {
                 mintRestless++;
             }
             if (d.getNumEvents() >= 0 && d.getNumEvents() < 50) {
