@@ -136,7 +136,9 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        SleepActivity.getActivity().finish();
+        if (SleepActivity.getActivity() != null) {
+            SleepActivity.getActivity().finish();
+        }
         finish();
     }
 
