@@ -2,13 +2,20 @@ package com.jrproject.brown_goist.intellalarm;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.Button;
+import android.widget.NumberPicker;
 
 import com.jrproject.brown_goist.intellalarm.calibrate.CalibrationActivity;
 import com.jrproject.brown_goist.intellalarm.graph.BarChartActivity;
@@ -19,6 +26,9 @@ import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
 import java.lang.reflect.Field;
 
 public abstract class BaseActivity extends Activity implements android.view.View.OnClickListener {
+
+    public static final String KEY_PRIOR_MINUTES = "KEY_PRIOR_MINUTES";
+    private int priorMin = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,22 +105,97 @@ public abstract class BaseActivity extends Activity implements android.view.View
     }
 
     protected void callSleepActivity() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(BaseActivity.this);
-        dialog.setTitle("Sleep");
-        dialog.setMessage("Start sleep monitoring now?");
-        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(BaseActivity.this);
+//        dialog.setTitle("Sleep");
+//        dialog.setMessage("Start sleep monitoring now?");
+//        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Intent startSleepIntent = new Intent(BaseActivity.this, SleepActivity.class);
+//                startActivity(startSleepIntent);
+//            }
+//        });
+//        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.show();
+
+        DialogFragment df = new DialogFragment() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent startSleepIntent = new Intent(BaseActivity.this, SleepActivity.class);
-                startActivity(startSleepIntent);
+            public Dialog onCreateDialog(Bundle savedInstanceState) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                //Inflate view
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View view = inflater.inflate(R.layout.custom_dialog, null);
+                builder.setView(view);
+                NumberPicker numberPicker = (NumberPicker) view.findViewById(R.id.customDialogPriorNumberPicker);
+                numberPicker.setMinValue(0);
+                numberPicker.setMaxValue(6);
+                String[] vals = {"0", "5", "10", "15", "20", "25", "30"};
+                numberPicker.setDisplayedValues(vals);
+                numberPicker.setValue(0);
+                numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+
+                    @Override
+                    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                        // TODO Auto-generated method stub
+                        Log.d("BaseActivity", "Number Picker value: " + newVal);
+                        switch (newVal) {
+                            case 0:
+                                priorMin = 0;
+                                break;
+                            case 1:
+                                priorMin = 5;
+                                break;
+                            case 2:
+                                priorMin = 10;
+                                break;
+                            case 3:
+                                priorMin = 15;
+                                break;
+                            case 4:
+                                priorMin = 20;
+                                break;
+                            case 5:
+                                priorMin = 25;
+                                break;
+                            case 6:
+                                priorMin = 30;
+                                break;
+                        }
+                        Log.d("BaseActivity", "Minutes Prior: " + priorMin);
+                    }
+                });
+
+                Button cancelButton = (Button) view.findViewById(R.id.buttonCancel);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dismiss();
+                    }
+                });
+                Button confirmButton = (Button) view.findViewById(R.id.buttonConfirm);
+                confirmButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //add collecting prior time and passing it on
+                        Intent startSleepIntent = new Intent(BaseActivity.this, SleepActivity.class);
+                        startSleepIntent.putExtra(KEY_PRIOR_MINUTES, priorMin);
+
+                        //add this at the beginning of whatever activity uses this info
+//                        Intent data = getIntent();
+//                        priorMin = data.getIntExtra(BaseActivity.KEY_PRIOR_MINUTES, -1);
+
+                        startActivity(startSleepIntent);
+                    }
+                });
+
+                return builder.create();
             }
-        });
-        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+        };
+        df.show(getFragmentManager(), "");
     }
 }

@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_8hours"
             style="?android:attr/buttonBarButtonStyle"
-            android:textColor="#FFB01E" />
+            android:textColor="@color/our_orange" />
 
         <Button
             android:id="@+id/button12Hours"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_12hours"
             style="?android:attr/buttonBarButtonStyle"
-            android:textColor="#FFB01E" />
+            android:textColor="@color/our_orange" />
 
         <Button
             android:id="@+id/buttonDay"
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_day"
             style="?android:attr/buttonBarButtonStyle"
-            android:textColor="#FFB01E" />
+            android:textColor="@color/our_orange" />
 
         <Button
             style="?android:attr/buttonBarButtonStyle"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/graph_activity_button_week"
-            android:textColor="#FFB01E" />
+            android:textColor="@color/our_orange" />
 
     </LinearLayout>
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:text="@string/barchart_table_header_text"
         android:textSize="20sp"
-        android:textColor="#00BCD4"
+        android:textColor="@color/our_blue"
         android:layout_gravity="center_horizontal"
         android:layout_above="@+id/tableLayout"
         android:paddingTop="10dp"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/barchart_time_slept_text"
                 android:textSize="20sp"
-                android:textColor="#00BCD4" />
+                android:textColor="@color/our_blue" />
 
             <TextView
                 android:id="@+id/timeSleptEditText"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/barchart_time_format"
                 android:textSize="20sp"
-                android:textColor="#00BCD4" />
+                android:textColor="@color/our_blue" />
         </TableRow>
 
         <TableRow
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/barchart_time_awake_text"
                 android:textSize="20sp"
-                android:textColor="#00BCD4" />
+                android:textColor="@color/our_blue" />
 
             <TextView
                 android:id="@+id/timeAwakeEditText"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/barchart_time_format"
                 android:textSize="20sp"
-                android:textColor="#00BCD4" />
+                android:textColor="@color/our_blue" />
         </TableRow>
 
         <TableRow
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/barchart_time_restless_text"
                 android:textSize="20sp"
-                android:textColor="#00BCD4" />
+                android:textColor="@color/our_blue" />
 
             <TextView
                 android:id="@+id/timeRestlessEditText"
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/barchart_time_format"
                 android:textSize="20sp"
-                android:textColor="#00BCD4" />
+                android:textColor="@color/our_blue" />
         </TableRow>
     </TableLayout>
 
