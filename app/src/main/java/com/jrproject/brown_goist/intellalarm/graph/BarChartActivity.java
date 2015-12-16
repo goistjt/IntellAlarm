@@ -33,8 +33,8 @@ import java.util.TimeZone;
 public class BarChartActivity extends BaseActivity {
 
     private BarChart mChart;
-    private TextView sleepText, awakeText, restlessText, cyclesText, tableHeaderText;
-    private int minAsleep, minAwake, mintRestless, cycles = 0;
+    private TextView sleepText, awakeText, restlessText, tableHeaderText;
+    private int minAsleep, minAwake, mintRestless = 0;
     private int[] colors = {Color.rgb(250, 140, 140), Color.rgb(242, 238, 109), Color.rgb(0, 188, 212)};
 
     private DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -66,7 +66,6 @@ public class BarChartActivity extends BaseActivity {
         sleepText = (TextView) findViewById(R.id.timeSleptEditText);
         awakeText = (TextView) findViewById(R.id.timeAwakeEditText);
         restlessText = (TextView) findViewById(R.id.timeRestlessEditText);
-        cyclesText = (TextView) findViewById(R.id.sleepCyclesEditText);
 
         mChart = (BarChart) findViewById(R.id.chart1);
 

@@ -39,8 +39,6 @@
     <string name="barchart_time_format">0 hrs 0 min</string>
     <string name="barchart_time_awake_text">Total Time Awake</string>
     <string name="barchart_time_restless_text">Total Time Restless</string>
-    <string name="barchart_sleep_cycles_text">Total Sleep Cycles</string>
-    <string name="barchart_sleep_cycles_format">0</string>
     <string name="barchart_table_header_text">Times For Past 8 Hours</string>
     <string name="graph_activity_button_week">Week</string>
 
