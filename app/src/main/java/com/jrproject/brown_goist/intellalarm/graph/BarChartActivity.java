@@ -59,6 +59,9 @@ public class BarChartActivity extends BaseActivity {
         Button dayButton = (Button) findViewById(R.id.buttonDay);
         dayButton.setOnClickListener(this);
 
+        Button weekButton = (Button) findViewById(R.id.buttonWeek);
+        weekButton.setOnClickListener(this);
+
         tableHeaderText = (TextView) findViewById(R.id.tableHeaderText);
         sleepText = (TextView) findViewById(R.id.timeSleptEditText);
         awakeText = (TextView) findViewById(R.id.timeAwakeEditText);
@@ -71,7 +74,7 @@ public class BarChartActivity extends BaseActivity {
 
         // if more than 60 entries are displayed in the chart, no values will be
         // drawn
-        mChart.setMaxVisibleValueCount(600);
+        mChart.setMaxVisibleValueCount(10100);
 
         // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
@@ -127,14 +130,15 @@ public class BarChartActivity extends BaseActivity {
         ArrayList<BarEntry> yVals = new ArrayList<>();
 
         List<SensorData> sd = graphType.equals("8hours") ? SensorDatabase.get8Hours() :
-                graphType.equals("12hours") ? SensorDatabase.get12Hours() : SensorDatabase.getDay();
+                graphType.equals("12hours") ? SensorDatabase.get12Hours() :
+                        graphType.equals("day") ? SensorDatabase.getDay() : SensorDatabase.getWeek();
 
         if (sd.size() != 0) {
 
             SensorData prev = null;
-            long startTime = graphType.equals("8hours") ? System.currentTimeMillis() - 3600 * 8 * 1000 :
-                    graphType.equals("12hours") ? System.currentTimeMillis() - 3600 * 12 * 1000 :
-                            System.currentTimeMillis() - 3600 * 24 * 1000;
+            long startTime = System.currentTimeMillis() - (graphType.equals("8hours") ? 3600 * 8 * 1000 :
+                    graphType.equals("12hours") ? 3600 * 12 * 1000 :
+                            graphType.equals("day") ? 3600 * 24 * 1000 : 3600 * 24 * 7 * 1000);
             long endTime = System.currentTimeMillis();
 
             List<SensorData> fillerData = new ArrayList<>();
@@ -204,7 +208,6 @@ public class BarChartActivity extends BaseActivity {
         }
 
         MyBarDataSet set1 = new MyBarDataSet(yVals, "Data Set");
-        //set1.setColor(Color.rgb(0, 188, 212));
         set1.setColors(colors);
         set1.setDrawValues(false);
 
@@ -233,8 +236,9 @@ public class BarChartActivity extends BaseActivity {
 
         minAsleep = minAwake = mintRestless = 0;
 
-        hours = type.equals("8hours") ? 8 : type.equals("12hours") ? 12 : 24;
-        s = "Times For Past " + hours + " hours";
+        String time = type.equals("8hours") ? "8 Hours" : type.equals("12hours") ? "12 Hours" :
+                type.equals("day") ? "Day" : "Week";
+        s = "Times For Past " + time;
         tableHeaderText.setText(s);
     }
 
@@ -270,6 +274,10 @@ public class BarChartActivity extends BaseActivity {
             case R.id.buttonDay:
                 Log.d("BarChartActivity", "Day button pressed");
                 updateGraph("day");
+                break;
+            case R.id.buttonWeek:
+                Log.d("BarChartActivity", "Week button pressed");
+                updateGraph("week");
                 break;
         }
     }

@@ -44,6 +44,14 @@
             style="?android:attr/buttonBarButtonStyle"
             android:textColor="#FFB01E" />
 
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/buttonWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/graph_activity_button_week"
+            android:textColor="#FFB01E" />
+
     </LinearLayout>
 
     <TextView
