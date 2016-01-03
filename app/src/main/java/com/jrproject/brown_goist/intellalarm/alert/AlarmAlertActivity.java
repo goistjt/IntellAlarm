@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -24,6 +25,8 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
     private Alarm alarm;
     private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
+    public AudioManager audioManager;
+    final Handler handler = new Handler();
     private boolean alarmActive;
 
     @Override
@@ -34,6 +37,8 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setContentView(R.layout.alarm_alert);
+
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         Bundle bundle = this.getIntent().getExtras();
         alarm = (Alarm) bundle.getSerializable("alarm");
@@ -74,7 +79,6 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
     }
 
     private void startAlarm() {
-
         if (!alarm.getAlarmTonePath().equals("")) {
             mediaPlayer = new MediaPlayer();
             if (alarm.getVibrate()) {
@@ -83,14 +87,18 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
                 vibrator.vibrate(pattern, 0);
             }
             try {
-                mediaPlayer.setVolume(1.0f, 1.0f);
+                if (alarm.getProgressive()) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
+                } else {
+                    audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 7, 0);
+                }
                 mediaPlayer.setDataSource(this,
                         Uri.parse(alarm.getAlarmTonePath()));
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
-
+                handler.post(new VolumeRunnable(audioManager, handler));
             } catch (Exception e) {
                 mediaPlayer.release();
                 alarmActive = false;
@@ -142,4 +150,27 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         finish();
     }
 
+    public class VolumeRunnable implements Runnable {
+
+        private AudioManager mAudioManager;
+        private Handler mHandlerThatWillIncreaseVolume;
+        private final static int DELAY_UNTIL_NEXT_INCREASE = 10 * 1000;//10 seconds between each increment
+
+        VolumeRunnable(AudioManager audioManager, Handler handler) {
+            this.mAudioManager = audioManager;
+            this.mHandlerThatWillIncreaseVolume = handler;
+        }
+
+        @Override
+        public void run() {
+            int currentAlarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+            if (currentAlarmVolume != mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)) { //if we haven't reached the max
+                mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, currentAlarmVolume + 1, 0);
+                //here increase the volume of the alarm stream by adding currentAlarmVolume+someNewFactor
+                mHandlerThatWillIncreaseVolume.postDelayed(this, DELAY_UNTIL_NEXT_INCREASE); //"recursively call this runnable again
+                // with some delay between each increment of the volume, until the condition above is satisfied.
+            }
+
+        }
+    }
 }
