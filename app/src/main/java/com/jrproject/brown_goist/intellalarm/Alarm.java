@@ -56,6 +56,7 @@ public class Alarm implements Serializable {
     private String alarmTonePath = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM).toString();
     private Boolean vibrate = true;
     private String alarmName = "Alarm Clock";
+    private Boolean progressive = false;
 
     public Alarm() {
     }
@@ -178,6 +179,20 @@ public class Alarm implements Serializable {
      */
     public void setAlarmTonePath(String alarmTonePath) {
         this.alarmTonePath = alarmTonePath;
+    }
+
+    /**
+     * @return the progressive
+     */
+    public Boolean getProgressive() {
+        return progressive;
+    }
+
+    /**
+     * @param progressive the progressive to set
+     */
+    public void setProgressive(Boolean progressive) {
+        this.progressive = progressive;
     }
 
     /**

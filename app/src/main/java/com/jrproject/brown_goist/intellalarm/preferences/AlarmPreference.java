@@ -8,7 +8,8 @@ public class AlarmPreference {
 		ALARM_TIME,
 		ALARM_REPEAT,
 		ALARM_TONE,
-		ALARM_VIBRATE
+		ALARM_VIBRATE,
+		ALARM_PROGRESSIVE
 	}
 
 	public enum Type{

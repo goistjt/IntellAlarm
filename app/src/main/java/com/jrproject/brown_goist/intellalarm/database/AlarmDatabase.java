@@ -40,6 +40,7 @@ public class AlarmDatabase extends SQLiteOpenHelper {
     public static final String COLUMN_ALARM_TONE = "alarm_tone";
     public static final String COLUMN_ALARM_VIBRATE = "alarm_vibrate";
     public static final String COLUMN_ALARM_NAME = "alarm_name";
+    public static final String COLUMN_ALARM_PROGRESSIVE = "alarm_progressive";
 
     public static void init(Context context) {
         if (instance == null) {
@@ -83,6 +84,7 @@ public class AlarmDatabase extends SQLiteOpenHelper {
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
         cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
         cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
+        cv.put(COLUMN_ALARM_PROGRESSIVE, alarm.getProgressive());
 
         return getDatabase().insert(ALARM_TABLE, null, cv);
     }
@@ -108,6 +110,7 @@ public class AlarmDatabase extends SQLiteOpenHelper {
         cv.put(COLUMN_ALARM_TONE, alarm.getAlarmTonePath());
         cv.put(COLUMN_ALARM_VIBRATE, alarm.getVibrate());
         cv.put(COLUMN_ALARM_NAME, alarm.getAlarmName());
+        cv.put(COLUMN_ALARM_PROGRESSIVE, alarm.getProgressive());
 
         return getDatabase().update(ALARM_TABLE, cv, "_id=" + alarm.getId(), null);
     }
@@ -133,7 +136,8 @@ public class AlarmDatabase extends SQLiteOpenHelper {
                 COLUMN_ALARM_DAYS,
                 COLUMN_ALARM_TONE,
                 COLUMN_ALARM_VIBRATE,
-                COLUMN_ALARM_NAME
+                COLUMN_ALARM_NAME,
+                COLUMN_ALARM_PROGRESSIVE
         };
         Cursor c = getDatabase().query(ALARM_TABLE, columns, COLUMN_ALARM_ID + "=" + id, null, null, null,
                 null);
@@ -162,6 +166,7 @@ public class AlarmDatabase extends SQLiteOpenHelper {
             alarm.setAlarmTonePath(c.getString(6));
             alarm.setVibrate(c.getInt(7) == 1);
             alarm.setAlarmName(c.getString(8));
+            alarm.setProgressive(c.getInt(9) == 1);
         }
         c.close();
         return alarm;
@@ -176,7 +181,8 @@ public class AlarmDatabase extends SQLiteOpenHelper {
                 COLUMN_ALARM_DAYS,
                 COLUMN_ALARM_TONE,
                 COLUMN_ALARM_VIBRATE,
-                COLUMN_ALARM_NAME
+                COLUMN_ALARM_NAME,
+                COLUMN_ALARM_PROGRESSIVE
         };
         return getDatabase().query(ALARM_TABLE, columns, null, null, null, null,
                 null);
@@ -196,7 +202,8 @@ public class AlarmDatabase extends SQLiteOpenHelper {
                 + COLUMN_ALARM_DAYS + " BLOB NOT NULL, "
                 + COLUMN_ALARM_TONE + " TEXT NOT NULL, "
                 + COLUMN_ALARM_VIBRATE + " INTEGER NOT NULL, "
-                + COLUMN_ALARM_NAME + " TEXT NOT NULL)");
+                + COLUMN_ALARM_NAME + " TEXT NOT NULL, "
+                + COLUMN_ALARM_PROGRESSIVE + " INTEGER NOT NULL)");
     }
 
     @Override
@@ -235,6 +242,7 @@ public class AlarmDatabase extends SQLiteOpenHelper {
                 alarm.setAlarmTonePath(cursor.getString(cursor.getColumnIndex(COLUMN_ALARM_TONE)));
                 alarm.setVibrate(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ALARM_VIBRATE)) == 1);
                 alarm.setAlarmName(cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ALARM_NAME)));
+                alarm.setProgressive(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ALARM_PROGRESSIVE)) == 1);
 
                 alarms.add(alarm);
 

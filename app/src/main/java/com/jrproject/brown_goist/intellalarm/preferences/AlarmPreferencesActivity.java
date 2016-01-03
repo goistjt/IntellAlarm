@@ -85,6 +85,9 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                     vibrator.vibrate(1000);
                                 }
                                 break;
+                            case ALARM_PROGRESSIVE:
+                                alarm.setProgressive(checked);
+                                break;
                         }
                         alarmPreference.setValue(checked);
                         break;

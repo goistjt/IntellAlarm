@@ -131,6 +131,9 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                 case ALARM_REPEAT:
                     alarm.setDays((Alarm.Day[]) preference.getValue());
                     break;
+                case ALARM_PROGRESSIVE:
+                    alarm.setProgressive((Boolean) preference.getValue());
+                    break;
             }
         }
         return alarm;
@@ -159,6 +162,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         }
 
         preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_VIBRATE, "Vibrate", null, null, alarm.getVibrate(), Type.BOOLEAN));
+        preferences.add(new AlarmPreference(AlarmPreference.Key.ALARM_PROGRESSIVE, "Progressive", null, null, alarm.getProgressive(), Type.BOOLEAN));
     }
 
 
