@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
 import com.jrproject.brown_goist.intellalarm.AlarmActivity;
+import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.SensorData;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
@@ -38,6 +39,8 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     private static final int VALS_PER_MIN = 25 * 60;
     private int vals = 0;
     private int events = 0;
+    private long priorMin;
+    private long alarmTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +52,11 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         AlarmDatabase.init(this);
         SensorDatabase.init(this);
 
-        TextView alarmTime = (TextView) findViewById(R.id.sleep_activity_alarm_text);
+        TextView alarmTimeText = (TextView) findViewById(R.id.sleep_activity_alarm_text);
         Alarm nextAlarm = AlarmDatabase.getNextAlarm();
         if (nextAlarm != null) {
-            alarmTime.setText(nextAlarm.getAlarmTimeString());
+            alarmTime = nextAlarm.getAlarmTime().getTimeInMillis();
+            alarmTimeText.setText(nextAlarm.getAlarmTimeString());
         }
 
         Button awakeButton = (Button) findViewById(R.id.sleep_activity_awake_button);
@@ -74,6 +78,10 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
 
         threshold = getApplicationContext().getSharedPreferences("IntellAlarm", 0).getFloat("threshold", .01F);
         Log.v("Sensor Threshold", "" + threshold);
+
+        Intent data = getIntent();
+        int prior = data.getIntExtra(BaseActivity.KEY_PRIOR_MINUTES, -1);
+        priorMin = alarmTime - (prior * 60 * 1000);
     }
 
     @Override
@@ -110,6 +118,15 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         return parentActivity;
     }
 
+    public void checkSleepStatus(SensorData sd) {
+        //check to see if user is restless or awake within specified time prior to alarm
+        //if so, activate alarm now rather than wait
+        if (sd.getStatus() != SensorData.Status.ASLEEP) {
+            //set off alarm
+            Log.d("SleepSensor", "SET OFF ALARM!!");
+        }
+    }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         SensorData sensorData = new SensorData();
@@ -125,6 +142,9 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             sensorData.setNumEvents(events);
             sensorData.setTimeStamp();
             SensorDatabase.create(sensorData);
+            if (System.currentTimeMillis() > priorMin) {
+                checkSleepStatus(sensorData);
+            }
             vals = 0;
             events = 0;
         }

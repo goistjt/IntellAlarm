@@ -105,24 +105,6 @@ public abstract class BaseActivity extends Activity implements android.view.View
     }
 
     protected void callSleepActivity() {
-//        AlertDialog.Builder dialog = new AlertDialog.Builder(BaseActivity.this);
-//        dialog.setTitle("Sleep");
-//        dialog.setMessage("Start sleep monitoring now?");
-//        dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                Intent startSleepIntent = new Intent(BaseActivity.this, SleepActivity.class);
-//                startActivity(startSleepIntent);
-//            }
-//        });
-//        dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        dialog.show();
-
         DialogFragment df = new DialogFragment() {
             @Override
             public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -184,10 +166,6 @@ public abstract class BaseActivity extends Activity implements android.view.View
                         //add collecting prior time and passing it on
                         Intent startSleepIntent = new Intent(BaseActivity.this, SleepActivity.class);
                         startSleepIntent.putExtra(KEY_PRIOR_MINUTES, priorMin);
-
-                        //add this at the beginning of whatever activity uses this info
-//                        Intent data = getIntent();
-//                        priorMin = data.getIntExtra(BaseActivity.KEY_PRIOR_MINUTES, -1);
 
                         startActivity(startSleepIntent);
                     }
