@@ -150,6 +150,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             Log.v("Blargh", "Current c.getTime(): " + c.getTime().toString());
             String date = df.format(c.getTime());
             copy.setAlarmTime(date);
+            copy.schedule(getApplicationContext());
         }
     }
 
