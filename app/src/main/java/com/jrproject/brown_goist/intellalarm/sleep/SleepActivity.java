@@ -1,6 +1,8 @@
 package com.jrproject.brown_goist.intellalarm.sleep;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -22,8 +24,13 @@ import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.SensorData;
+import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class SleepActivity extends Activity implements View.OnLongClickListener, SensorEventListener {
 
@@ -41,6 +48,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     private int events = 0;
     private long priorMin;
     private long alarmTime;
+    private Alarm nextAlarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +61,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         SensorDatabase.init(this);
 
         TextView alarmTimeText = (TextView) findViewById(R.id.sleep_activity_alarm_text);
-        Alarm nextAlarm = AlarmDatabase.getNextAlarm();
+        nextAlarm = AlarmDatabase.getNextAlarm();
         if (nextAlarm != null) {
             alarmTime = nextAlarm.getAlarmTime().getTimeInMillis();
             alarmTimeText.setText(nextAlarm.getAlarmTimeString());
@@ -124,6 +132,24 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         if (sd.getStatus() != SensorData.Status.ASLEEP) {
             //set off alarm
             Log.d("SleepSensor", "SET OFF ALARM!!");
+
+            //Cancelling the previously set alarm
+            Intent cancelAlarm = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
+            cancelAlarm.putExtra("alarm", nextAlarm);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, cancelAlarm, PendingIntent
+                    .FLAG_CANCEL_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+
+            //Making a new alarm and setting it off
+            Alarm copy = nextAlarm;
+            DateFormat df = new SimpleDateFormat("HH:mm:ss");
+            Calendar c = Calendar.getInstance();
+            Log.v("Blargh", "Current c.getTime(): " + c.getTime().toString());
+            c.add(Calendar.SECOND, 5);
+            Log.v("Blargh", "Current c.getTime(): " + c.getTime().toString());
+            String date = df.format(c.getTime());
+            copy.setAlarmTime(date);
         }
     }
 
