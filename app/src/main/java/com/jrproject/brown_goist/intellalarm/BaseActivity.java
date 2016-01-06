@@ -124,7 +124,6 @@ public abstract class BaseActivity extends Activity implements android.view.View
                     @Override
                     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                         // TODO Auto-generated method stub
-                        Log.d("BaseActivity", "Number Picker value: " + newVal);
                         switch (newVal) {
                             case 0:
                                 priorMin = 0;
@@ -148,7 +147,6 @@ public abstract class BaseActivity extends Activity implements android.view.View
                                 priorMin = 30;
                                 break;
                         }
-                        Log.d("BaseActivity", "Minutes Prior: " + priorMin);
                     }
                 });
 

@@ -9,7 +9,8 @@ public class SensorData implements Comparable<SensorData>{
     public enum Status {
         AWAKE,
         ASLEEP,
-        RESTLESS
+        RESTLESS,
+        NULL
     }
 
     public SensorData() {
@@ -28,8 +29,8 @@ public class SensorData implements Comparable<SensorData>{
         return numEvents;
     }
 
-    public void setNumEvents(int numEvents) {
-        this.numEvents = numEvents;
+    public void setNumEvents(int events) {
+        numEvents = events;
         setStatusFlag();
     }
 
@@ -54,6 +55,8 @@ public class SensorData implements Comparable<SensorData>{
         }
         if (numEvents >= 0 && numEvents < 50) {
             s = Status.ASLEEP;
+        } if (numEvents < 0) {
+            s = Status.NULL;
         }
     }
 

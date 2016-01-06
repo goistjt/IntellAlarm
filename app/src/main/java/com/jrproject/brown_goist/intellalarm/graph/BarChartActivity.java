@@ -186,7 +186,7 @@ public class BarChartActivity extends BaseActivity {
             //Add filler data to list of SensorData
             sd.addAll(fillerData);
 
-            //Sorting data chronological after adding dummy values
+            //Sorting data chronologically after adding dummy values
             Collections.sort(sd);
         }
 
