@@ -133,21 +133,20 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             //set off alarm
             Log.d("SleepSensor", "SET OFF ALARM!!");
 
-            //Cancelling the previously set alarm
-            Intent cancelAlarm = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
-            cancelAlarm.putExtra("alarm", nextAlarm);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, cancelAlarm, PendingIntent
-                    .FLAG_CANCEL_CURRENT);
+            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
+            myIntent.putExtra("alarm", nextAlarm);
+            PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            pi.cancel();
             AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            alarmManager.cancel(pendingIntent);
+            Log.d("SleepActivity", "next alarm: " + nextAlarm);
+            alarmManager.cancel(pi);
 
             //Making a new alarm and setting it off
             Alarm copy = nextAlarm;
-            DateFormat df = new SimpleDateFormat("HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("HH:mm");
             Calendar c = Calendar.getInstance();
-            Log.v("Blargh", "Current c.getTime(): " + c.getTime().toString());
-            c.add(Calendar.SECOND, 5);
-            Log.v("Blargh", "Current c.getTime(): " + c.getTime().toString());
+            c.add(Calendar.MINUTE, 1);
             String date = df.format(c.getTime());
             copy.setAlarmTime(date);
             copy.schedule(getApplicationContext());
