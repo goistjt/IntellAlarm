@@ -122,11 +122,13 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         if (vibrator != null)
             vibrator.cancel();
-        try {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!alarm.getAlarmTonePath().equals("")) {
+            try {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         super.onDestroy();
     }

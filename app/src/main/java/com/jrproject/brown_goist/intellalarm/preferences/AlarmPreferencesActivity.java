@@ -1,13 +1,17 @@
 package com.jrproject.brown_goist.intellalarm.preferences;
 
 import android.app.ActionBar;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -28,8 +32,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
+import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.BaseActivity;
 import com.jrproject.brown_goist.intellalarm.R;
+import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreference.Key;
 
@@ -263,7 +269,8 @@ public class AlarmPreferencesActivity extends BaseActivity {
                 } else {
                     AlarmDatabase.update(getAlarm());
                 }
-                callAlarmScheduleService();
+                //callAlarmScheduleService();
+                getAlarm().schedule(getApplicationContext());
                 Toast.makeText(AlarmPreferencesActivity.this, getAlarm().getTimeUntilNextAlarmMessage(), Toast.LENGTH_LONG).show();
                 finish();
                 break;
@@ -277,7 +284,13 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         AlarmDatabase.init(getApplicationContext());
                         if (getAlarm().getId() >= 1) {
                             AlarmDatabase.deleteEntry(alarm);
-                            callAlarmScheduleService();
+                            //callAlarmScheduleService();
+                            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
+                            myIntent.putExtra("alarm", alarm);
+                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                            AlarmManager alarmManager = AlarmActivity.alarmManager;
+                            alarmManager.cancel(pendingIntent);
+                            pendingIntent.cancel();
                         } // Alarm not saved if id < 1
                         finish();
                     }

@@ -21,6 +21,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
+import com.jrproject.brown_goist.intellalarm.AlarmActivity;
 import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 
@@ -82,7 +83,7 @@ public class AlarmService extends Service {
             myIntent.putExtra("alarm", new Alarm());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+            AlarmManager alarmManager = AlarmActivity.alarmManager;
             alarmManager.cancel(pendingIntent);
         }
         return START_NOT_STICKY;

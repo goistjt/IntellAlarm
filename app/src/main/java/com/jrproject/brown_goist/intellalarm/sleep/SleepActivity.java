@@ -49,6 +49,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     private long priorMin;
     private long alarmTime;
     private Alarm nextAlarm;
+    private boolean earlyActivation = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +130,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
     public void checkSleepStatus(SensorData sd) {
         //check to see if user is restless or awake within specified time prior to alarm
         //if so, activate alarm now rather than wait
-        if (sd.getStatus() != SensorData.Status.ASLEEP) {
+        if (sd.getStatus() != SensorData.Status.ASLEEP && !earlyActivation) {
             //set off alarm
             Log.d("SleepSensor", "SET OFF ALARM!!");
 
@@ -138,8 +139,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
             pi.cancel();
-            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            Log.d("SleepActivity", "next alarm: " + nextAlarm);
+            AlarmManager alarmManager = AlarmActivity.alarmManager;
             alarmManager.cancel(pi);
 
             //Making a new alarm and setting it off
@@ -150,6 +150,8 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             String date = df.format(c.getTime());
             copy.setAlarmTime(date);
             copy.schedule(getApplicationContext());
+
+            earlyActivation = true;
         }
     }
 
