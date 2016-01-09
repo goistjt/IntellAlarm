@@ -137,7 +137,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
             myIntent.putExtra("alarm", nextAlarm);
             PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent.FLAG_CANCEL_CURRENT);
             pi.cancel();
             AlarmManager alarmManager = AlarmActivity.alarmManager;
             alarmManager.cancel(pi);
