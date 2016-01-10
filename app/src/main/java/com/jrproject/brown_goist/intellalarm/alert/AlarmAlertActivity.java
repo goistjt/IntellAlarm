@@ -166,7 +166,6 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
             int currentAlarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
             if (currentAlarmVolume != mAudioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)) { //if we haven't reached the max
                 mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM, currentAlarmVolume + 1, 0);
-                //here increase the volume of the alarm stream by adding currentAlarmVolume+someNewFactor
                 mHandlerThatWillIncreaseVolume.postDelayed(this, DELAY_UNTIL_NEXT_INCREASE); //"recursively call this runnable again
                 // with some delay between each increment of the volume, until the condition above is satisfied.
             }

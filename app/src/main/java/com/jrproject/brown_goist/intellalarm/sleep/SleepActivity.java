@@ -27,6 +27,7 @@ import com.jrproject.brown_goist.intellalarm.SensorData;
 import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.database.SensorDatabase;
+import com.jrproject.brown_goist.intellalarm.service.AlarmServiceBroadcastReceiver;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -133,14 +134,19 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             //set off alarm
             Log.d("SleepSensor", "SET OFF ALARM!!");
 
+            //Disabling nextAlarm
             Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
             myIntent.putExtra("alarm", nextAlarm);
             PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            pi.cancel();
+                    PendingIntent.FLAG_CANCEL_CURRENT);
             AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            Log.d("SleepActivity", "next alarm: " + nextAlarm);
             alarmManager.cancel(pi);
+
+            //Setup call to re-enable alarms
+            Intent alarmServiceIntent = new Intent(this, AlarmServiceBroadcastReceiver.class);
+            PendingIntent alarmEnabler = PendingIntent.getBroadcast(getApplicationContext(), 0, alarmServiceIntent, PendingIntent
+                    .FLAG_CANCEL_CURRENT);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlarm.getAlarmTime().getTimeInMillis(), alarmEnabler);
 
             //Making a new alarm and setting it off
             Alarm copy = nextAlarm;
