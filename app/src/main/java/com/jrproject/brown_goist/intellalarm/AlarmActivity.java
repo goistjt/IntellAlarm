@@ -41,14 +41,11 @@ public class AlarmActivity extends BaseActivity {
 
     ListView alarmListView;
     AlarmListAdapter alarmListAdapter;
-    public static AlarmManager alarmManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_activity);
-
-        alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
         alarmListView = (ListView) findViewById(android.R.id.list);
         alarmListView.setLongClickable(true);
@@ -66,11 +63,7 @@ public class AlarmActivity extends BaseActivity {
                         AlarmDatabase.init(AlarmActivity.this);
                         AlarmDatabase.deleteEntry(alarm);
                         //AlarmActivity.this.callAlarmScheduleService();
-                        Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
-                        myIntent.putExtra("alarm", alarm);
-                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                        alarmManager.cancel(pendingIntent);
-                        pendingIntent.cancel();
+                        alarm.unschedule(getApplicationContext());
                         updateAlarmList();
                     }
                 });
@@ -157,11 +150,7 @@ public class AlarmActivity extends BaseActivity {
                 alarm.schedule(getApplicationContext());
                 Toast.makeText(AlarmActivity.this, alarm.getTimeUntilNextAlarmMessage(), Toast.LENGTH_SHORT).show();
             } else {
-                Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
-                myIntent.putExtra("alarm", alarm);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                alarmManager.cancel(pendingIntent);
-                pendingIntent.cancel();
+                alarm.unschedule(getApplicationContext());
             }
         }
     }

@@ -60,7 +60,11 @@
                 android:value=".sleep.SleepActivity"/>
         </activity>
 
-        <receiver android:name=".alert.AlarmAlertBroadcastReceiver">
+        <receiver android:name=".alert.AlarmAlertBroadcastReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+            </intent-filter>
         </receiver>
         <receiver android:name=".telephony.PhoneStateChangedBroadcastReceiver">
             <intent-filter>

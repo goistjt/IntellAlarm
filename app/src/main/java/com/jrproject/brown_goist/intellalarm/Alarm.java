@@ -255,9 +255,18 @@ public class Alarm implements Serializable {
         setAlarmActive(true);
         Intent myIntent = new Intent(context, AlarmAlertBroadcastReceiver.class);
         myIntent.putExtra("alarm", this);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarmManager = AlarmActivity.alarmManager;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, getAlarmTime().getTimeInMillis(), pendingIntent);
+    }
+
+    public void unschedule(Context context) {
+        Intent myIntent = new Intent(context, AlarmAlertBroadcastReceiver.class);
+        myIntent.putExtra("alarm", this);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, myIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
     }
 
     public String getTimeUntilNextAlarmMessage() {

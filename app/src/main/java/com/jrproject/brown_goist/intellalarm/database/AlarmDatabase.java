@@ -260,9 +260,8 @@ public class AlarmDatabase extends SQLiteOpenHelper {
         Collections.sort(alarms, new Comparator<Alarm>() {
             @Override
             public int compare(Alarm lhs, Alarm rhs) {
-                long lhsTimeDiff = lhs.getAlarmTime().getTimeInMillis() - System.currentTimeMillis();
-                long rhsTimeDiff = rhs.getAlarmTime().getTimeInMillis() - System.currentTimeMillis();
-                return lhsTimeDiff > rhsTimeDiff ? -1 : rhsTimeDiff > lhsTimeDiff ? 1 : 0;
+                long diff = lhs.getAlarmTime().getTimeInMillis() - rhs.getAlarmTime().getTimeInMillis();
+                return diff > 0 ? 1 : diff < 0 ? -1 : 0;
             }
         });
         return alarms.get(0);

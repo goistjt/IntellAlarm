@@ -83,7 +83,7 @@ public class AlarmService extends Service {
             myIntent.putExtra("alarm", new Alarm());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
                     PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager alarmManager = AlarmActivity.alarmManager;
+            AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);
         }
         return START_NOT_STICKY;

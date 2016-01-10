@@ -86,7 +86,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         wakeLock.acquire();
 
         threshold = getApplicationContext().getSharedPreferences("IntellAlarm", 0).getFloat("threshold", .01F);
-        Log.v("Sensor Threshold", "" + threshold);
+        Log.d("Sensor Threshold", "" + threshold);
 
         Intent data = getIntent();
         int prior = data.getIntExtra(BaseActivity.KEY_PRIOR_MINUTES, -1);
@@ -134,13 +134,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
             //set off alarm
             Log.d("SleepSensor", "SET OFF ALARM!!");
 
-            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
-            myIntent.putExtra("alarm", nextAlarm);
-            PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
-                    PendingIntent.FLAG_CANCEL_CURRENT);
-            pi.cancel();
-            AlarmManager alarmManager = AlarmActivity.alarmManager;
-            alarmManager.cancel(pi);
+            nextAlarm.unschedule(getApplicationContext());
 
             //Making a new alarm and setting it off
             Alarm copy = nextAlarm;

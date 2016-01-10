@@ -39,6 +39,7 @@ import com.jrproject.brown_goist.intellalarm.alert.AlarmAlertBroadcastReceiver;
 import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
 import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreference.Key;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 public class AlarmPreferencesActivity extends BaseActivity {
@@ -285,12 +286,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                         if (getAlarm().getId() >= 1) {
                             AlarmDatabase.deleteEntry(alarm);
                             //callAlarmScheduleService();
-                            Intent myIntent = new Intent(getApplicationContext(), AlarmAlertBroadcastReceiver.class);
-                            myIntent.putExtra("alarm", alarm);
-                            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-                            AlarmManager alarmManager = AlarmActivity.alarmManager;
-                            alarmManager.cancel(pendingIntent);
-                            pendingIntent.cancel();
+                            alarm.unschedule(getApplicationContext());
                         } // Alarm not saved if id < 1
                         finish();
                     }
@@ -310,7 +306,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("alarm", getAlarm());
+        outState.putSerializable("alarm", (Serializable) getAlarm());
         outState.putSerializable("adapter", (AlarmPreferenceListAdapter) getListAdapter());
     }
 
