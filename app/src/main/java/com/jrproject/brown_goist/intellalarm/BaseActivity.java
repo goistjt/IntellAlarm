@@ -100,10 +100,10 @@ public abstract class BaseActivity extends Activity implements android.view.View
         dialog.show();
     }
 
-    protected void callAlarmScheduleService() {
-        Intent alarmServiceIntent = new Intent(this, AlarmServiceBroadcastReceiver.class);
-        sendBroadcast(alarmServiceIntent, null);
-    }
+//    protected void callAlarmScheduleService() {
+//        Intent alarmServiceIntent = new Intent(this, AlarmServiceBroadcastReceiver.class);
+//        sendBroadcast(alarmServiceIntent, null);
+//    }
 
     protected void callSleepActivity() {
         DialogFragment df = new DialogFragment() {

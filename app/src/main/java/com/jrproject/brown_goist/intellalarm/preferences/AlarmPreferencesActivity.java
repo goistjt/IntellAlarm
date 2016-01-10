@@ -306,7 +306,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putSerializable("alarm", (Serializable) getAlarm());
+        outState.putSerializable("alarm", getAlarm());
         outState.putSerializable("adapter", (AlarmPreferenceListAdapter) getListAdapter());
     }
 
