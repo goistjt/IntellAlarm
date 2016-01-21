@@ -16,6 +16,9 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Model class for representing the data needed to store an alarm
+ */
 public class Alarm implements Serializable {
 
     public enum Day {

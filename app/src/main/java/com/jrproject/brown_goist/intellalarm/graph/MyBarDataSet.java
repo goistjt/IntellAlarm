@@ -5,6 +5,9 @@ import com.github.mikephil.charting.data.BarEntry;
 
 import java.util.List;
 
+/**
+ * Extending the standard MPAndroidChart in order to determine bar color by value
+ */
 public class MyBarDataSet extends BarDataSet {
     public MyBarDataSet(List<BarEntry> yVals, String label) {
         super(yVals, label);

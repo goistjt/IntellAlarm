@@ -1,15 +1,3 @@
-/* Copyright 2014 Sheldon Neilson www.neilson.co.za
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing
- * permissions and limitations under the License.
- */
 package com.jrproject.brown_goist.intellalarm;
 
 import android.app.AlertDialog;
@@ -33,11 +21,18 @@ import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreferencesActivit
 
 import java.util.List;
 
+/**
+ * Activity for viewing available alarms and setting listeners to click them -> move to edit screen or delete option
+ */
 public class AlarmActivity extends BaseActivity {
 
     ListView alarmListView;
     AlarmListAdapter alarmListAdapter;
 
+    /**
+     * Initialize screen, call alarm scheduler to make sure correct alarm will go off next
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -29,6 +29,10 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
     final Handler handler = new Handler();
     private boolean alarmActive;
 
+    /**
+     * Initializing alarm alert screen and calling start alarm
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +83,7 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
     }
 
     private void startAlarm() {
+        //Only do all this if the Alarm path isn't null
         if (!alarm.getAlarmTonePath().equals("")) {
             mediaPlayer = new MediaPlayer();
             if (alarm.getVibrate()) {
@@ -87,17 +92,20 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
                 vibrator.vibrate(pattern, 0);
             }
             try {
+                //Setting initial volume based on progressive flag
                 if (alarm.getProgressive()) {
                     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 0, 0);
                 } else {
                     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, 7, 0);
                 }
+                //Initializing media player
                 mediaPlayer.setDataSource(this,
                         Uri.parse(alarm.getAlarmTonePath()));
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                 mediaPlayer.setLooping(true);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
+                //Asynchronous handler activation
                 handler.post(new VolumeRunnable(audioManager, handler));
             } catch (Exception e) {
                 mediaPlayer.release();
@@ -108,6 +116,7 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
 
     @Override
     public void onBackPressed() {
+        //Only allow back to work if alarm is off (this should never be hit)
         if (!alarmActive)
             super.onBackPressed();
     }
@@ -118,6 +127,9 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         StaticWakeLock.lockOff(this);
     }
 
+    /**
+     * Ending/releasing the vibrator and media player on screen close
+     */
     @Override
     protected void onDestroy() {
         if (vibrator != null)
@@ -131,6 +143,10 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         super.onDestroy();
     }
 
+    /**
+     * On click handler for the "off" button to turn off alarm and return to previous screen
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (!alarmActive) {
@@ -150,6 +166,9 @@ public class AlarmAlertActivity extends Activity implements OnClickListener {
         finish();
     }
 
+    /**
+     * Runnable that will increment the current alarm volume level by one every ten seconds until max volume is reached
+     */
     public class VolumeRunnable implements Runnable {
 
         private AudioManager mAudioManager;

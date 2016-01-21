@@ -35,6 +35,9 @@ import com.jrproject.brown_goist.intellalarm.preferences.AlarmPreference.Key;
 
 import java.util.Calendar;
 
+/**
+ * Screen to select options for an alarm and then save/delete it
+ */
 public class AlarmPreferencesActivity extends BaseActivity {
     private Alarm alarm;
     private MediaPlayer mediaPlayer;
@@ -42,6 +45,10 @@ public class AlarmPreferencesActivity extends BaseActivity {
     private ListView listView;
     private CountDownTimer alarmToneTimer;
 
+    /**
+     * Intializes the view and sets listeners for each list item so that they may change states or show further options
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +57,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
         setContentView(R.layout.alarm_preferences);
 
         Bundle bundle = getIntent().getExtras();
+        //Load information with a selected alarm or with a new alarm
         if (bundle != null && bundle.containsKey("alarm")) {
             setAlarm((Alarm) bundle.getSerializable("alarm"));
         } else {
@@ -134,7 +142,6 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                                 mediaPlayer.reset();
                                             }
                                             try {
-                                                // mediaPlayer.setVolume(1.0f, 1.0f);
                                                 mediaPlayer.setVolume(0.2f, 0.2f);
                                                 mediaPlayer.setDataSource(AlarmPreferencesActivity.this, Uri.parse(alarm.getAlarmTonePath
                                                         ()));
@@ -149,7 +156,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                                 alarmToneTimer = new CountDownTimer(3000, 3000) {
                                                     @Override
                                                     public void onTick(long millisUntilFinished) {
-
+                                                        //Do nothing
                                                     }
 
                                                     @Override
@@ -196,7 +203,7 @@ public class AlarmPreferencesActivity extends BaseActivity {
                                 if (isChecked) {
                                     alarm.addDay(thisDay);
                                 } else {
-                                    // Only remove the day if there are more than 1 selected
+                                    // Only remove the day if there is more than 1 selected
                                     if (alarm.getDays().length > 1) {
                                         alarm.removeDay(thisDay);
                                     } else {
@@ -339,14 +346,8 @@ public class AlarmPreferencesActivity extends BaseActivity {
         return listView;
     }
 
-    /*
-    public void setListView(ListView listView) {
-        this.listView = listView;
-    }
-    */
-
     @Override
     public void onClick(View v) {
-
+        //Overriding BaseActivity's OnClick to make it do nothing
     }
 }

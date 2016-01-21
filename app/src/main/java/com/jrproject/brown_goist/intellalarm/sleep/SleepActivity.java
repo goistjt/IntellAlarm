@@ -85,6 +85,7 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Sleep Screen Data Collection");
         wakeLock.acquire();
 
+        //Sets threshold to be value from SharedPrefs, or .01 if no value was collected.
         threshold = getApplicationContext().getSharedPreferences("IntellAlarm", 0).getFloat("threshold", .01F);
         Log.v("Sensor Threshold", "" + threshold);
 
@@ -164,12 +165,17 @@ public class SleepActivity extends Activity implements View.OnLongClickListener,
         SensorData sensorData = new SensorData();
         float absSize = (float) Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] +
                 event.values[2] * event.values[2]);
+        //If the size of the event was greater than max noise value, keep it
         absSize = absSize > threshold ? absSize : 0;
+        //Determine how much change there was from previous reading
         float deriv = absSize - prev;
+        //Only inc num of events if the deriv > 0 -- This happens when several readings in row are within threshold values (all
+        // recognized as zeroes)
         if (deriv != 0) {
             events++;
         }
         vals++;
+        //Store the data collected only once per minute and check sleep status
         if (vals >= VALS_PER_MIN) {
             sensorData.setNumEvents(events);
             sensorData.setTimeStamp();

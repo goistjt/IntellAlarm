@@ -1,5 +1,8 @@
 package com.jrproject.brown_goist.intellalarm.preferences;
 
+/**
+ * Class to store the alarm data for viewing on preferences screen
+ */
 public class AlarmPreference {
 
 	public enum Key{
@@ -14,7 +17,6 @@ public class AlarmPreference {
 
 	public enum Type{
 		BOOLEAN,
-		INTEGER,
 		STRING,
 		LIST,
 		MULTIPLE_LIST,
@@ -27,10 +29,6 @@ public class AlarmPreference {
 	private Object value;
 	private String[] options;
 	private Type type;
-
-	public AlarmPreference(Key key, Object value, Type type) {
-		this(key,null,null,null, value, type);
-	}
 
 	public AlarmPreference(Key key,String title, String summary, String[] options, Object value, Type type) {
 		setTitle(title);

@@ -252,6 +252,10 @@ public class AlarmDatabase extends SQLiteOpenHelper {
         return alarms;
     }
 
+    /**
+     * Sorts through alarms in order to get the next occurring
+     * @return Alarm
+     */
     public static Alarm getNextAlarm() {
         List<Alarm> alarms = getAll();
         if (alarms.isEmpty()) {

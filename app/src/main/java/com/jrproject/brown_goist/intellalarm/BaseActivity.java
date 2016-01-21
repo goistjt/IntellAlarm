@@ -1,11 +1,9 @@
 package com.jrproject.brown_goist.intellalarm;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +24,9 @@ import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
 
 import java.lang.reflect.Field;
 
+/**
+ * Standard methods that activities within application should have access to
+ */
 public abstract class BaseActivity extends Activity implements android.view.View.OnClickListener {
 
     public static final String KEY_PRIOR_MINUTES = "KEY_PRIOR_MINUTES";

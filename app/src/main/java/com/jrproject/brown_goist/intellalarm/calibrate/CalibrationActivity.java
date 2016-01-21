@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.jrproject.brown_goist.intellalarm.R;
 import com.jrproject.brown_goist.intellalarm.sleep.SleepActivity;
 
+/**
+ * Calibration activity should be run before using Sleep the first time, while phone is at 100% charge. Accounts for sensor noise
+ */
 public class CalibrationActivity extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -29,6 +32,7 @@ public class CalibrationActivity extends Activity implements SensorEventListener
 
         countdown = (TextView) findViewById(R.id.calibration_countdown_text_view);
 
+        //Checking for and initializing the linear accelerometer, which removes force of gravity from values returned
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         if (sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION) != null) {
             Log.d("SleepSensor", "Linear Accelerometer Exists");
@@ -40,6 +44,10 @@ public class CalibrationActivity extends Activity implements SensorEventListener
     }
 
 
+    /**
+     * Each time sensor reads during 5 second period, it updates the max noise value, and eventually saves it as a SharedPreference setting
+     * @param event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         float absSize = (float) Math.sqrt(event.values[0] * event.values[0] + event.values[1] * event.values[1] +

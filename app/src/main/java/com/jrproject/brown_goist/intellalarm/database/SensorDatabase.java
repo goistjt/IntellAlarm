@@ -93,29 +93,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
         return data;
     }
 
-    public static Cursor getCursorAll() {
-        String[] columns = new String[]{
-                COLUMN_SENSOR_ID,
-                COLUMN_EVENTS,
-                COLUMN_SENSOR_TIMESTAMP
-        };
-        return getDatabase().query(SENSOR_TABLE, columns, null, null, null, null,
-                null);
-    }
-
-    public static Cursor getCursorHourly(int start, int end) {
-        long currDateTime = System.currentTimeMillis() - 3600 * end * 1000;
-        long prevDateTime = System.currentTimeMillis() - 3600 * start * 1000;
-        String[] columns = new String[]{
-                COLUMN_SENSOR_ID,
-                COLUMN_EVENTS,
-                COLUMN_SENSOR_TIMESTAMP
-        };
-        return getDatabase().query(SENSOR_TABLE, columns,
-                COLUMN_SENSOR_TIMESTAMP + " >= " + prevDateTime + " AND " +
-                        COLUMN_SENSOR_TIMESTAMP + " <= " + currDateTime, null, null, null, null);
-    }
-
     public static Cursor getCursor8Hours() {
         long currDateTime = System.currentTimeMillis();
         long prevDateTime = System.currentTimeMillis() - 3600 * 8 * 1000;
@@ -184,44 +161,6 @@ public class SensorDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + SENSOR_TABLE);
         onCreate(db);
-    }
-
-    public static List<SensorData> getAll() {
-        List<SensorData> sensors = new ArrayList<>();
-        Cursor cursor = SensorDatabase.getCursorAll();
-        if (cursor.moveToFirst()) {
-
-            do {
-                SensorData sensorData = new SensorData();
-                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
-                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
-
-                sensors.add(sensorData);
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return sensors;
-    }
-
-    public static List<SensorData> getHourly(int start, int end) {
-        List<SensorData> sensors = new ArrayList<>();
-        Cursor cursor = SensorDatabase.getCursorHourly(start, end);
-        if (cursor.moveToFirst()) {
-
-            do {
-                SensorData sensorData = new SensorData();
-                sensorData.setId(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_ID)));
-                sensorData.setNumEvents(cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_EVENTS)));
-                sensorData.setTimeStamp(cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_SENSOR_TIMESTAMP)));
-
-                sensors.add(sensorData);
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return sensors;
     }
 
     public static List<SensorData> get8Hours() {

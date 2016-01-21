@@ -7,15 +7,13 @@ import android.os.Bundle;
 
 import com.jrproject.brown_goist.intellalarm.Alarm;
 
+/**
+ * Broadcast receiver which listens for the broadcast to begin an alarm
+ */
 public class AlarmAlertBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-//		Intent alarmServiceIntent = new Intent(
-//				context,
-//				AlarmServiceBroadcastReceiver.class);
-//		context.sendBroadcast(alarmServiceIntent, null);
-
 		StaticWakeLock.lockOn(context);
 		Bundle bundle = intent.getExtras();
 		final Alarm alarm = (Alarm) bundle.getSerializable("alarm");

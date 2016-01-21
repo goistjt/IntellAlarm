@@ -1,5 +1,8 @@
 package com.jrproject.brown_goist.intellalarm;
 
+/**
+ * Model class to represent one minute of sensor data
+ */
 public class SensorData implements Comparable<SensorData>{
 
     private int id;

@@ -20,6 +20,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ListAdapter in order to show preferences for alarms without making an xml content file
+ */
 public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializable {
 
     private Context context;
@@ -33,10 +36,6 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
     public AlarmPreferenceListAdapter(Context context, Alarm alarm) {
         setContext(context);
 
-//		(new Runnable(){
-//
-//			@Override
-//			public void run() {
         Log.d("APLA", "Loading Ringtones...");
 
         RingtoneManager ringtoneMgr = new RingtoneManager(getContext());
@@ -49,6 +48,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         alarmTonePaths = new String[alarmsCursor.getCount() + 1];
         alarmTonePaths[0] = "";
 
+        //Getting all the alarm tones stored on the phone and storing in an array
         if (alarmsCursor.moveToFirst()) {
             do {
                 alarmTones[alarmsCursor.getPosition() + 1] = ringtoneMgr.getRingtone(alarmsCursor.getPosition()).getTitle(getContext());
@@ -57,11 +57,6 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         }
         Log.d("APLA", "Finished Loading " + alarmTones.length + " Ringtones.");
         alarmsCursor.close();
-//
-//			}
-//
-//		}).run();
-//
         setAlarm(alarm);
     }
 
@@ -86,6 +81,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         switch (alarmPreference.getType()) {
             case BOOLEAN:
+                //This error can be ignored, simply an inspection issue
                 if ((convertView == null) || (convertView.getId() != android.R.layout.simple_list_item_checked)) {
                     convertView = layoutInflater.inflate(android.R.layout.simple_list_item_checked, null);
                 }
@@ -95,6 +91,7 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
                 checkedTextView.setChecked((Boolean) alarmPreference.getValue());
                 break;
             default:
+                //This error can be ignored, simply an inspection issue
                 if (null == convertView || convertView.getId() != android.R.layout.simple_list_item_2) {
                     convertView = layoutInflater.inflate(android.R.layout.simple_list_item_2, null);
                 }
@@ -172,10 +169,6 @@ public class AlarmPreferenceListAdapter extends BaseAdapter implements Serializa
 
     public void setContext(Context context) {
         this.context = context;
-    }
-
-    public String[] getRepeatDays() {
-        return repeatDays;
     }
 
     public String[] getAlarmTones() {

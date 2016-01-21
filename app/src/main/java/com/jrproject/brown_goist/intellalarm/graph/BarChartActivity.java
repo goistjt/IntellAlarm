@@ -30,11 +30,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+/**
+ * Uses MPAndroidChart to draw a bar graph detailing movement data collected during Sleep mode
+ */
 public class BarChartActivity extends BaseActivity {
 
     private BarChart mChart;
     private TextView sleepText, awakeText, restlessText, tableHeaderText;
-    private int minAsleep, minAwake, mintRestless = 0;
+    private int minAsleep, minAwake, minRestless = 0;
+    //Red/pink, yellow/orange, and light blue color definitions
     private int[] colors = {Color.rgb(250, 140, 140), Color.rgb(242, 238, 109), Color.rgb(0, 188, 212)};
 
     private DateFormat df = new SimpleDateFormat("HH:mm", Locale.getDefault());
@@ -71,11 +75,8 @@ public class BarChartActivity extends BaseActivity {
 
         mChart.setDescription("");
 
-        // if more than 60 entries are displayed in the chart, no values will be
-        // drawn
         mChart.setMaxVisibleValueCount(10100);
 
-        // scaling can now only be done on x- and y-axis separately
         mChart.setPinchZoom(false);
 
         mChart.setDrawBarShadow(false);
@@ -99,13 +100,7 @@ public class BarChartActivity extends BaseActivity {
 
         mChart.getLegend().setEnabled(false);
 
-        // Legend l = mChart.getLegend();
-        // l.setPosition(LegendPosition.BELOW_CHART_CENTER);
-        // l.setFormSize(8f);
-        // l.setFormToTextSpace(4f);
-        // l.setXEntrySpace(6f);
-
-        // mChart.setDrawLegend(false);
+        //Initially show data for 8 hours
         updateGraph("8hours");
     }
 
@@ -199,7 +194,7 @@ public class BarChartActivity extends BaseActivity {
                     minAwake++;
                     break;
                 case RESTLESS:
-                    mintRestless++;
+                    minRestless++;
                     break;
                 case ASLEEP:
                     minAsleep++;
@@ -232,10 +227,10 @@ public class BarChartActivity extends BaseActivity {
         s = minAwake + " min";
         awakeText.setText(s);
 
-        s = mintRestless + " min";
+        s = minRestless + " min";
         restlessText.setText(s);
 
-        minAsleep = minAwake = mintRestless = 0;
+        minAsleep = minAwake = minRestless = 0;
 
         String time = type.equals("8hours") ? "8 Hours" : type.equals("12hours") ? "12 Hours" :
                 type.equals("day") ? "Day" : "Week";

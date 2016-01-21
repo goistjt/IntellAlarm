@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Non UI-thread class which gets the next occurring alarm and schedules it with an AlarmManager, or cancels alarms if all are disabled
+ */
 public class AlarmService extends Service {
 
     @Override

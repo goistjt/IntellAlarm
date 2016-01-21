@@ -7,18 +7,16 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.jrproject.brown_goist.intellalarm.database.AlarmDatabase;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * List adapter for getting alarms and viewing them in AlarmActivity
+ */
 public class AlarmListAdapter extends BaseAdapter {
 
     private AlarmActivity alarmActivity;
     private List<Alarm> alarms = new ArrayList<>();
-
-    public static final String ALARM_FIELDS[] = {AlarmDatabase.COLUMN_ALARM_ACTIVE,
-            AlarmDatabase.COLUMN_ALARM_TIME, AlarmDatabase.COLUMN_ALARM_DAYS};
 
     public AlarmListAdapter(AlarmActivity alarmActivity) {
         this.alarmActivity = alarmActivity;
@@ -58,10 +56,6 @@ public class AlarmListAdapter extends BaseAdapter {
         alarmDaysView.setText(alarm.getRepeatDaysString());
 
         return view;
-    }
-
-    public List<Alarm> getAlarms() {
-        return alarms;
     }
 
     public void setAlarms(List<Alarm> alarms) {
